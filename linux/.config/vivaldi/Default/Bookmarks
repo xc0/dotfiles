@@ -1,0 +1,80 @@
+{
+   "checksum": "8250edc3762957c29952f56761588a0a",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13144487599716873",
+            "id": "66",
+            "meta_info": {
+               "last_visited_desktop": "13144487599717167"
+            },
+            "name": "neovimへ移行したい · GitHub",
+            "type": "url",
+            "url": "https://gist.github.com/toenobu/53a37afab0c0c42fb03ad78745ca8cb0"
+         }, {
+            "date_added": "13144487565591669",
+            "id": "64",
+            "meta_info": {
+               "last_visited_desktop": "13144487565601589"
+            },
+            "name": "Re:ゼロから始めるNeovim生活 - Qiita",
+            "type": "url",
+            "url": "http://qiita.com/himanoa/items/27dcc0667f722374a633"
+         }, {
+            "date_added": "13144487585113362",
+            "id": "65",
+            "meta_info": {
+               "last_visited_desktop": "13144487585113685"
+            },
+            "name": "NeoVim と dein.vim を使ってみる! - Qiita",
+            "type": "url",
+            "url": "http://qiita.com/Ress/items/7e71e007cf8d41a07a1a#_reference-47cfe0fce2ee71abfcf6"
+         }, {
+            "date_added": "13144487608143875",
+            "id": "67",
+            "meta_info": {
+               "last_visited_desktop": "13144494094829485"
+            },
+            "name": "Ubuntu 16.04LTS にLaTeX をインストール - Qiita",
+            "type": "url",
+            "url": "http://qiita.com/seki0913/items/fe9a50ea11c716d76514"
+         } ],
+         "date_added": "13144446328886834",
+         "date_modified": "13144487608143875",
+         "id": "1",
+         "name": "ブックマーク",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13144446328918205",
+         "date_modified": "0",
+         "id": "2",
+         "name": "その他のブックマーク",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13144446328918215",
+         "date_modified": "0",
+         "id": "3",
+         "name": "モバイルのブックマーク",
+         "type": "folder"
+      },
+      "trash": {
+         "children": [ {
+            "date_added": "13144487561966091",
+            "id": "63",
+            "name": "",
+            "type": "url",
+            "url": "http://bookmark.placeholder.url/"
+         } ],
+         "date_added": "13144446328918218",
+         "date_modified": "13144487564086075",
+         "id": "4",
+         "name": "ごみ箱",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}

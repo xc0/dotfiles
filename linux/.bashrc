@@ -124,6 +124,8 @@ function crontab() {
 alias ls='ls --color'
 alias ll='ls -al'
 
+export XDG_CONFIG_HOME=~/.config
+
 export LANG=ja_JP.UTF-8
 #export LANG=C
 #export DISPLAY="localhost:10.0"
@@ -138,9 +140,8 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$HOME/.rbenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(rbenv init -)"
+export PATH=~/work/go/go1.4/bin:$PATH
 export PATH=~/usr/bin:/home/xcd0/work/bin:/home/xcd0/bin:$PATH
 
 alias xc0='ssh -2 -C -Y -p52622 xc0@xcd0.com'
 
-alias gpl='git pull origin master'
-alias gps='git push origin master'
