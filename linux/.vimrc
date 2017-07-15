@@ -1,5 +1,7 @@
+" 2017/07/15/17:30.13 edited.
 " 2017/05/10/08:27.50 edited.
 
+" よくある設定 {{{
 set nocompatible
 set noreadonly
 set autoread
@@ -55,7 +57,6 @@ if has('win32unix')
 endif
 
 
-
 "色設定
 hi SpecialKey ctermfg=237 guifg=#3a3a3a
 hi NonText ctermfg=66 guifg=#5f8787
@@ -65,7 +66,9 @@ if (exists('+colorcolumn'))		" 80カラムを強調
 	highlight ColorColumn ctermbg=9
 endif
 
+"}}}
 
+" プラグイン設定 {{{
 
 " VimFilerを標準のファイラーに設定
 " :e . でnetrtの変わりにVimFilerが起動する
@@ -76,7 +79,6 @@ augroup vimrc-checktime
   autocmd WinEnter * checktime
 augroup END
 
-" neobundle settings {{{
 if has('vim_starting')
   set nocompatible
   " neobundle をインストールしていない場合は自動インストール
@@ -111,7 +113,6 @@ NeoBundle 'simeji/winresizer'
 "なお、Escを２回押すことで unite で開いたバッファを閉じるように設定している(楽)
 "※<C- >はCtrl+いずれかのキー
 NeoBundle 'Shougo/unite.vim'
-" unite {{{
 let g:unite_enable_start_insert=1
 nmap <silent> <C-u><C-b> :<C-u>Unite buffer<CR>
 nmap <silent> <C-u><C-f> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
@@ -125,7 +126,6 @@ au FileType unite nmap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
 au FileType unite imap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
 au FileType unite nmap <silent> <buffer> <ESC><ESC> q
 au FileType unite imap <silent> <buffer> <ESC><ESC> <ESC>q
-" }}}
 
 ""neomru.vim""
 "unite.vim から独立した機能
@@ -135,7 +135,7 @@ NeoBundle 'Shougo/neomru.vim', {
   \ 'depends' : 'Shougo/unite.vim'
   \ }
 
-""vimproc""
+""vimproc
 "vim に非同期処理を提供してくれる縁の下の力持ち
 "多数のプラグインがこいつを頼りに高速化している。
 NeoBundle 'Shougo/vimproc', {
@@ -146,7 +146,7 @@ NeoBundle 'Shougo/vimproc', {
   \     'unix' : 'make -f make_unix.mak',
   \    },
   \ }
-"""""""""""""""""""""
+
 ""neocomplete.vim""
 "クソ強力な補完機能を使えるようになる
 "vimproc で高速化するやつ...というか作者が一緒
@@ -157,8 +157,6 @@ if has('lua')
     \ 'autoload' : { 'insert' : 1,}
     \ }
 endif
-
-" neocomplete {{{
 let g:neocomplete#enable_at_startup               = 1
 let g:neocomplete#auto_completion_start_length    = 3
 let g:neocomplete#enable_ignore_case              = 1
@@ -169,7 +167,6 @@ let g:neocomplete#sources#buffer#cache_limit_size = 1000000
 let g:neocomplete#sources#tags#cache_limit_size   = 30000000
 let g:neocomplete#enable_fuzzy_completion         = 1
 let g:neocomplete#lock_buffer_name_pattern        = '\*ku\*'
-" }}}
 
 ""vimshell""
 "vim からシェルを簡単に使えるようになる便利屋
@@ -191,14 +188,12 @@ NeoBundleLazy 'Shougo/vimshell', {
 "unite.vim と連携することで、(この設定では)\<C-p>で履歴一覧から絞り込み検索が可能
 NeoBundle 'LeafCage/yankround.vim'
 
-" yankround.vim {{{
 nmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)
 nmap <C-p> <Plug>(yankround-prev)
 nmap <C-n> <Plug>(yankround-next)
 let g:yankround_max_history = 100
 nnoremap <Leader><C-p> :<C-u>Unite yankround<CR>
-"}}}
 
 ""vimfiler""
 "ファイルビューア
@@ -210,13 +205,9 @@ NeoBundleLazy 'Shougo/vimfiler', {
   \   'mappings' : ['<Plug>(vimfiler_switch)'],
   \   'explorer' : 1,
   \ }}
-
-
-" vimfiler {{{
 let g:vimfiler_as_default_explorer  = 1
 let g:vimfiler_safe_mode_by_default = 0
 let g:vimfiler_data_directory       = expand('~/.vim/etc/vimfiler')
-" }}}
 
 ""vim-autoclose""
 "括弧を自動的に閉じてくれるやつ
@@ -234,7 +225,6 @@ NeoBundleLazy 'tpope/vim-endwise', {
 "移動したいところを決めてから使う最強のカーソル移動プラグイン
 "詳しくは過去記事(http://qiita.com/himinato/items/5fcdb3ad2885f0bc1ce6)を参照してください
 NeoBundle 'Lokaltog/vim-easymotion'
-" vim-easymotion {{{
 let g:EasyMotion_do_mapping = 0
 nmap s <Plug>(easymotion-s2)
 xmap s <Plug>(easymotion-s2)
@@ -249,7 +239,6 @@ let g:EasyMotion_startofline = 0
 let g:EasyMotion_keys = 'QZASDFGHJKL;'
 let g:EasyMotion_use_upper = 1
 let g:EasyMotion_enter_jump_first = 1
-" }}}
 
 ""vim-surround, matchit""
 "テキストを囲みや括弧のカーソル移動機能を拡張する
@@ -265,7 +254,6 @@ NeoBundleLazy 'thinca/vim-quickrun', {
   \   'mappings' : [['n', '\r']],
   \   'commands' : ['QuickRun']
   \ }}
-" quickrun {{{
 let g:quickrun_config = {}
 let g:quickrun_config._ = { 'runner' : 'vimproc',
   \ 'runner/vimproc/updatetime' : 200,
@@ -275,7 +263,6 @@ let g:quickrun_config._ = { 'runner' : 'vimproc',
   \ 'hook/close_buffer/enable_failure' : 1,
   \ }
 nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
-" }}}
 
 
 ""emmet-vim""
@@ -285,14 +272,12 @@ NeoBundleLazy 'mattn/emmet-vim', {
   \   'filetypes' : ['html', 'html5', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
   \   'commands' : ['<Plug>ZenCodingExpandNormal']
   \ }}
-" emmet {{{
 let g:use_emmet_complete_tag = 1
 let g:user_emmet_settings = {
   \ 'lang' : 'ja',
   \ 'html' : {
   \   'indentation' : '  '
   \ }}
-" }}}
 
 NeoBundle 'rking/ag.vim'
 " 行末ホワイトスペースの削除'bronson/vim-trailing-whitespace'
@@ -310,8 +295,9 @@ set completeopt=menu,preview
 
 call neobundle#end()
 
+"}}}
 
-"キー割り当て変更コマンド
+" キー割り当て変更 {{{
 "キー割り当て変更コマンドは、下のように、モードごと、再割当(remap)の有無によって別の名前が割り当てられています。
 "再割当無し	再割当有り	モード
 "noremap		map		ノーマルモード＋ビジュアルモード
@@ -348,11 +334,11 @@ nnoremap Q <Nop>		" exモードを無効
 nnoremap Q q
 nnoremap q <Nop>
 
-nnoremap setv :e $HOME/.vimrc<CR> " ,v でvimrcを開く
-nnoremap setb :e $HOME/.bashrc<CR>
+nnoremap setv :e $HOME/.vimrc<CR><ESC> " ,v でvimrcを開く
+nnoremap setb :e $HOME/.bashrc<CR><ESC>
 
-nnoremap vs :<C-u>VimShell<CR>
-nnoremap vp :<C-u>VimShellPop<CR>
+nnoremap vs :<C-u>VimShell<CR><ESC>
+nnoremap vp :<C-u>VimShellPop<CR><ESC>
 
 autocmd BufRead,BufNewFile *.py setfiletype python
 autocmd FileType python setl inoremap # <ESC>0i#<ESC>wi
@@ -360,11 +346,13 @@ autocmd FileType python setl inoremap # <ESC>0i#<ESC>wi
 
 nnoremap <TAB>f :<C-u>VimFilerBufferDir -split -simple -winwidth=35 -no-quit -toggle<CR>
 
-nnoremap <TAB>t :<C-u>tabnew<CR>	" TAB-tに新規タブ作成を割り当て
+nnoremap <TAB>t :<C-u>tabnew<CR><ESC>	" TAB-tに新規タブ作成を割り当て
 nnoremap <TAB>n gt		" 次のタブに移動
 nnoremap <TAB>p gT		" 前のタブに移動
 nnoremap <TAB>w <C-w>w		" TABwにウィンドウ切り替えを割り当て
 
 nnoremap <TAB>dt a<C-r>=strftime("%Y/%m/%d/%H:%M")<CR><ESC>		" 日時挿入
 nnoremap <Space>dt gg0O# <C-r>=strftime("%Y/%m/%d/%H:%M.%S")<CR> edited.<ESC>0		" 日時挿入
+
+" }}}
 

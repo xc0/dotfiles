@@ -24,7 +24,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
 
 	# latex
 	sudo aptitude install tex-live-lang-cjk
-	sudo cp ~/work/dotfiles/linux/sty/* /usr/share/texlive/texmf-dist/tex/latex/
+	sudo cp ~/work/dotfiles/sty/* /usr/share/texlive/texmf-dist/tex/latex/
 	sudo mktexlsr
 
 	# neovimのインストール

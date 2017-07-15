@@ -133,7 +133,7 @@ export AUTHORITY=$HOME/.Xauthority
 alias ucon='./configure --prefix=$HOME/usr'
 alias pbcopy='xsel --clipboard --input'
 alias pbpaste='xsel --clipboard --output'
-alias vi='nvim'
+alias nv='nvim'
 export PS1='\[\e[34m\]\@ \[\e[33m\]\u@\h \[\e[32m\]\w\e[0m\n\$ '
 
 export PYENV_ROOT="$HOME/.pyenv"

@@ -17,6 +17,6 @@ else
 fi
 
 for f in `ls $dir`; do
-	ln $dir/$f
+	ln -s $dir/$f
 done
 
