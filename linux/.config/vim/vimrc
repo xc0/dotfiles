@@ -73,23 +73,26 @@ endif
 
 "}}}
 
+
+
 " dein.vim {{{
 
 " NeoBundle時代の古い記述
 " いるのかわからない
 augroup vimrc-checktime
   autocmd!
-  autocmd WinEnter * checktime
-augroup END
+  autocmd winenter * checktime
+augroup end
 
 " dein のインストール方法
-" 他のプラグインとは違うインストールディレクトリを決めて以下のコマンドを実行
+" インストールディレクトリを決めて以下のコマンドを実行
 " $ curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
 " $ sh ./installer.sh {specify the installation directory}
 
 "dein Scripts-----------------------------
 
-set runtimepath+=$HOME/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+"set runtimepath+=$HOME/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+set runtimepath+=/home/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
 
 if dein#load_state($HOME . '/.config/vim/dein')
 	call dein#begin($HOME . '/.config/vim/dein')
@@ -124,6 +127,8 @@ endif
 "End dein Scripts-------------------------
 
 " }}}
+
+
 
 " キー割り当て変更 {{{
 "キー割り当て変更コマンドは、下のように、モードごと、再割当(remap)の有無によって別の名前が割り当てられています。

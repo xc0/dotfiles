@@ -1,80 +1,53 @@
 
+" dein.vim {{{
 
-# その他のプラグイン {{{
+" NeoBundle時代の古い記述
+" いるのかわからない
+augroup vimrc-checktime
+  autocmd!
+  autocmd winenter * checktime
+augroup end
 
+" dein のインストール方法
+" インストールディレクトリを決めて以下のコマンドを実行
+" $ curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+" $ sh ./installer.sh {specify the installation directory}
 
+"dein Scripts-----------------------------
 
-[[plugins]]
-repo = 'Townk/vim-autoclose'			"括弧を自動的に閉じる
+"set runtimepath+=$HOME/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+set runtimepath+=/home/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
 
-[[plugins]]
-repo = 'tpope/vim-endwise'
-# ifとかの終了宣言を自動で挿入
+if dein#load_state($HOME . '/.config/vim/dein')
+	call dein#begin($HOME . '/.config/vim/dein')
 
+	" Let dein manage dein  Required:
+	call dein#add($HOME . '/.config/vim/dein/repos/github.com/Shougo/dein.vim')
 
-# テキストを囲みや括弧のカーソル移動機能を拡張する
-[[plugins]]
-repo = 'tpope/vim-surround'
-[[plugins]]
-repo = 'vim-scripts/matchit.zip'
+	call dein#add('Shougo/neosnippet.vim')
+	call dein#add('Shougo/neosnippet-snippets')
 
-# \rで編集中のファイルを実行する
-[[plugins]]
-repo = 'thinca/vim-quickrun'
-mappings = [['n', '\r']]
-on_cmd = ['quickrun']
+	" toml
+	let g:rc_dir		= expand("~/.config/vim")
+	let s:toml		= g:rc_dir . '/dein.toml'
+	let s:lazy_toml	= g:rc_dir . '/dein_lazy.toml'
 
-hook_post_source = '''
-let g:quickrun_config = {}
-let g:quickrun_config._ = { 'runner' : 'vimproc',
-	'runner/vimproc/updatetime' : 200,
-	'outputter/buffer/split' : ':botright 8sp',
-	'outputter' : 'multi:buffer:quickfix',
-	'hook/close_buffer/enable_empty_data' : 1,
-	'hook/close_buffer/enable_failure' : 1,
-}
-nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
-'''
+	" read toml and cache
+	call dein#load_toml(s:toml,			{'lazy':0})
+	call dein#load_toml(s:lazy_toml,	{'lazy':0})
 
+	call dein#end()
+	call dein#save_state()
+endif
 
-# HTMLのタグを一瞬で入力できる。 <C-y>nで次のタグ入力箇所に移動できたりフロントエンドの味方
-[[plugins]]
-repo = 'mattn/emmet-vim'
-filetypes = ['html', 'html5', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
-on_cmd = ['<Plug>ZenCodingExpandNormal']
+" Required:
+filetype plugin indent on
+syntax enable
 
-hook_post_source = '''
-let g:use_emmet_complete_tag = 1
-let g:user_emmet_settings = {
-  \ 'lang' : 'ja',
-  \ 'html' : {
-  \   'indentation' : '  '
-  \ }}
-'''
+if dein#check_install()
+	call dein#install()
+endif
 
-# 検索強化
-[[plugins]]
-repo = 'rking/ag.vim'
+"End dein Scripts-------------------------
 
-# 行末ホワイトスペースの削除'bronson/vim-trailing-whitespace'
-[[plugins]]
-repo = 'bronson/vim-trailing-whitespace'
-
-# Go lang "
-[[plugins]]
-repo = 'fatih/vim-go'
-hook_post_source = '''
-set rtp+=$GOROOT/misc/vim
-exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim”)")
-set completeopt=menu,preview
-'''
-
-[[plugins]]
-repo = 'simeji/winresizer'
-
-
-
-# }}}
-
-
-
+" }}}
