@@ -1,5 +1,5 @@
 if g:dein#_cache_version != 100 | throw 'Cache loading error' | endif
-let [plugins, ftplugin] = dein#load_cache_raw(['/home/xcd0/.vimrc', '/home/xcd0/.config/vim/dein.toml'])
+let [plugins, ftplugin] = dein#load_cache_raw(['/home/xcd0/.vimrc', '/home/xcd0/.config/vim/dein_lazy.toml'])
 if empty(plugins) | throw 'Cache loading error' | endif
 let g:dein#_plugins = plugins
 let g:dein#_ftplugin = ftplugin
