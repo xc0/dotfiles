@@ -1,4 +1,6 @@
 
+# Shougo's plugin {{{
+
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
 [[plugins]]
@@ -6,6 +8,32 @@ repo = 'Shougo/neosnippet-snippets'
 [[plugins]]
 repo = 'Shougo/vimshell'
 #{ 'rev': '3787e5' }
+[[plugins]]
+repo = 'Shougo/unite.vim'
+[[plugins]]
+repo = 'Shougo/vimfiler'
+
+#}}}
+
+
+# その他いろいろ {{{
+[[plugins]]
+repo = 'tyru/caw.vim'				# コメントアウト強化 gciで行頭から,gcaで行末に
+hook_post_source= '''
+	nmap <Leader>c <Plug>(caw:i:toggle)		" \cでコメントOn/Off
+	vmap <Leader>c <Plug>(caw:i:toggle)		" \cでコメントOn/Off
+'''
+
+[[plugins]]
+repo = 'LeafCage/yankround.vim'		# クリップボード拡張
+hook_post_source= '''
+	nmap p <Plug>(yankround-p)
+	nmap P <Plug>(yankround-P)
+	nmap <C-p> <Plug>(yankround-prev)
+	nmap <C-n> <Plug>(yankround-next)
+	let g:yankround_max_history = 100
+	nnoremap <Leader><C-p> :<C-u>Denite yankround<CR>
+'''
 
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'		# 補完
@@ -14,7 +42,7 @@ repo = 'zchee/deoplete-go'			# golang
 [[plugins]]
 repo = 'landaire/deoplete-swift'	# swift
 [[plugins]]
-repo = 'zchee/deoplete-clang'		# C/C++/Obj-C/Obj-C++ 
+repo = 'zchee/deoplete-clang'		# C/C++/Obj-C/Obj-C++
 [[plugins]]
 repo = 'carlitux/deoplete-ternjs'	# javascript
 [[plugins]]
@@ -28,14 +56,17 @@ repo = 'rking/ag.vim'				# 行末ホワイトスペース削除
 [[plugins]]
 repo = 'mattn/emmet-vim'			# html,css,xml support
 [[plugins]]
-repo = 'LeafCage/yankround.vim'		# クリップボード拡張
-[[plugins]]
 repo = 'fatih/vim-go'				# golang support
+[[plugins]]
+repo = 	'yuratomo/w3m.vim'			# w3m
+
+#}}}
+
 
 # colorscheme {{{
 
 #[[plugins]]
-#repo = 'AlessandroYorba/Alduin'			# 
+#repo = 'AlessandroYorba/Alduin'	# 
 
 [[plugins]]
 repo = 'flazz/vim-colorschemes'		# カラースキーマいっぱい
@@ -48,47 +79,47 @@ repo = 'reedes/vim-colors-pencil'	#
 [[plugins]]
 repo = 'freeo/vim-kalisi'			# 
 [[plugins]]
-repo = 'Haron-Prime/Antares'			# 
+repo = 'Haron-Prime/Antares'		# 
 [[plugins]]
-repo = 'bluz71/vim-moonfly-colors'			# 
+repo = 'bluz71/vim-moonfly-colors'	# 
 [[plugins]]
 repo = 'NewProggie/NewProggie-Color-Scheme'			# 
 [[plugins]]
-repo = 'zcodes/vim-colors-basic'			# 
+repo = 'zcodes/vim-colors-basic'	# 
 [[plugins]]
 repo = 'ayu-theme/ayu-vim'			# 
 [[plugins]]
-repo = 'dracula/vim'			# 
+repo = 'dracula/vim'				# 
 [[plugins]]
-repo = 'fcpg/vim-fahrenheit'			# 
+repo = 'fcpg/vim-fahrenheit'		# 
 [[plugins]]
-repo = 'joshdick/onedark.vim'			# 
+repo = 'joshdick/onedark.vim'		# 
 [[plugins]]
-repo = 'Donearm/Ubaryd'			# 
+repo = 'Donearm/Ubaryd'				# 
 [[plugins]]
 repo = 'jyota/vimColors'			# 
 [[plugins]]
-repo = 'DrSpatula/vim-buddy'			# 
+repo = 'DrSpatula/vim-buddy'		# 
 [[plugins]]
-repo = 'evgenyzinoviev/vim-vendetta'			# 
+repo = 'evgenyzinoviev/vim-vendetta'	# 
 [[plugins]]
-repo = 'hewo/vim-colorscheme-deepsea'			# 
+repo = 'hewo/vim-colorscheme-deepsea'	# 
 [[plugins]]
-repo = 'croaker/mustang-vim'			# 
+repo = 'croaker/mustang-vim'		# 
 [[plugins]]
 repo = 'vim-scripts/inkpot'			# 
 [[plugins]]
-repo = 'lxmzhv/vim'			# 
+repo = 'lxmzhv/vim'					# 
 [[plugins]]
-repo = 'goatslacker/mango.vim'			# 
+repo = 'goatslacker/mango.vim'		# 
 [[plugins]]
-repo = 'jpo/vim-railscasts-theme'		# 
+repo = 'jpo/vim-railscasts-theme'	# 
 [[plugins]]
-repo = 'justincampbell/vim-railscasts'		# 
+repo = 'justincampbell/vim-railscasts'	# 
 [[plugins]]
-repo = 'zeis/vim-kolor'			# 
+repo = 'zeis/vim-kolor'				# 
 [[plugins]]
-repo = 'ninja/sky'			# 
+repo = 'ninja/sky'					# 
 [[plugins]]
 repo = 'tomasr/molokai'				# molokai
 

@@ -1,19 +1,8 @@
 sudo: false
-dist: trusty
 
-language: python
-
-python:
-    - 3.3
-    - 3.4
-    - 3.5
-
-install:
-    # Install Neovim via Gist
-    # https://gist.github.com/lambdalisue/0f461f6a91743895394e63a9a1c65232
-    - curl -sL https://gist.githubusercontent.com/lambdalisue/0f461f6a91743895394e63a9a1c65232/raw/install_nvim_for_ci.sh | bash
-    - make install
+before_script:
+    - git clone https://github.com/syngan/vim-vimlint /tmp/vim-vimlint
+    - git clone https://github.com/ynkdir/vim-vimlparser /tmp/vim-vimlparser
 
 script:
-    - PATH="$HOME/neovim/bin:$PATH" make test
-    - make lint
+    - sh /tmp/vim-vimlint/bin/vimlint.sh -l /tmp/vim-vimlint -p /tmp/vim-vimlparser -e EVL103=1 -e EVL102.l:_=1 autoload

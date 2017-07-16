@@ -1,38 +1,30 @@
-**Warning:  I will close the bug issue without the minimal init.vim and the reproduce ways.**
-
 # Problems summary
 
 
 ## Expected
 
 
-## Environment Information (Required!)
-
- * denite version(SHA1):
-
+## Environment Information
  * OS:
+ * Vim version:
 
- * Vim/neovim version:
 
- * `:CheckHealth` result(neovim only):
-
-## Provide a minimal init.vim with less than 50 lines (Required!)
+## Provide a minimal .vimrc with less than 50 lines (Required!)
 
 ```vim
-" Your minimal init.vim
-set runtimepath+=~/path/to/denite.nvim/
+" Your minimal .vimrc
+set runtimepath+=~/path/to/unite.nvim/
 ```
 
 
-## The reproduce ways from neovim starting (Required!)
+## The reproduce ways from Vim starting (Required!)
 
  1. foo
  2. bar
  3. baz
 
 
-
 ## Screen shot (if possible)
 
 
-## Upload the log file
+## Upload the log messages by `:redir` and `:message`

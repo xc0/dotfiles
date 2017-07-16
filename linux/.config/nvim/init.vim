@@ -2,7 +2,10 @@
 
 " よくある設定 {{{
 
-set nocompatible					" 互換モードoff
+if &compatible
+	set nocompatible               " Be iMproved
+endif
+
 set noreadonly						" 書き込み禁止属性解除
 set encoding=utf-8					" 文字列の文字コードをUTF-8に
 set fileencoding=utf-8				" ファイルの文字コードをUTF-8に
@@ -64,33 +67,31 @@ endif
 " $ sh ./installer.sh {specify the installation directory}
 
 "dein Scripts-----------------------------
-if &compatible
-	set nocompatible               " Be iMproved
-endif
 
 " Required:
 set runtimepath+=$HOME/.config/nvim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
 
-if dein#load_state($HOME . '.config/nvim/dein')		" Required:
+if dein#load_state($HOME . '/.config/nvim/dein')		" Required:
 	call dein#begin($HOME . '/.config/nvim/dein')
 
-	" Let dein manage dein  Required:
-	"call dein#add($HOME .'.config/nvim/dein/repos/github.com/Shougo/dein.vim')
+	" Let dein manage dein (Required)
+	call dein#add($HOME .'.config/nvim/dein/repos/github.com/Shougo/dein.vim')
 
 	" You can specify revision/branch/tag.
-	"call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
+	call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
 
 	" toml
 	let g:rc_dir		= expand("~/.config/nvim")
 	let s:toml		= g:rc_dir . '/dein.toml'
-	let s:lazy_toml	= g:rc_dir .'/dein_lazy.toml'
+	let s:lazy_toml	= g:rc_dir . '/dein_lazy.toml'
 
 	" read toml and cache
-	call dein#load_toml(s:toml,		{'lazy':0})
-	call dein#load_toml(s:lazy_toml,		{'lazy':0})
+	call dein#load_toml(s:toml,			{'lazy':0})
+	call dein#load_toml(s:lazy_toml,	{'lazy':0})
 
 
-	call dein#end()				" Required:
+	" Required:
+	call dein#end()
 	call dein#save_state()
 endif
 
@@ -100,15 +101,9 @@ syntax enable
 
 "End dein Scripts-------------------------
 
-
 if dein#check_install()
 	call dein#install()
 endif
-
-" vim-go
-set rtp+=$GOROOT/misc/vim
-exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim”)")
-set completeopt=menu,preview
 
 " }}}
 
@@ -147,13 +142,13 @@ nnoremap q <Nop>
 nnoremap j gj
 nnoremap k gk
 inoremap jj <ESC>
-nmap <Esc><Esc> :nohlsearch<CR><Esc>	" ESC連打でハイライト解除
+nmap <Esc><Esc> :noh<CR><Esc>	" ESC連打でハイライト解除
 
 nnoremap s4t :%s/\s\s\s\s/\t/g<CR><ESC>		" スペース4をタブに置換
 nnoremap s2t :%s/\s\s/\t/g<CR><ESC>			" スペース2をタブに置換
 
 nnoremap <TAB>dt a<C-r>=strftime("%Y/%m/%d/%H:%M")<CR><ESC>		" 日時挿入
-nnoremap <Space>dt gg0O# <C-r>=strftime("%Y/%m/%d/%H:%M.%S")<CR> edited.<ESC>0	" 日時挿入
+nnoremap <Space>dt gg0O<C-r>=strftime("%Y/%m/%d/%H:%M.%S")<CR> edited.<ESC>gci0		" 日時挿入 caw.vimを使ってる
 
 
 nnoremap <TAB>f :<C-u>VimFilerBufferDir -split -simple -winwidth=35 -no-quit -toggle<CR><ESC>
@@ -164,13 +159,6 @@ nnoremap <TAB>p gT		" 前のタブに移動
 nnoremap <TAB>w <C-w>w		" TABwにウィンドウ切り替えを割り当て
 
 
-" yankround
-nmap p <Plug>(yankround-p)
-nmap P <Plug>(yankround-P)
-nmap <C-p> <Plug>(yankround-prev)
-nmap <C-n> <Plug>(yankround-next)
-let g:yankround_max_history = 100
-nnoremap <Leader><C-p> :<C-u>Denite yankround<CR>
 
 " }}}
 
@@ -198,26 +186,29 @@ colorscheme evening		" 灰色で落ち着いた感じ
 colorscheme slate		" 暗めの灰色で少しはっきりした感じ
 colorscheme kalisi
 
-colorscheme kolor		" 暗めの灰色で落ち着いた感じ
-colorscheme buddy
-colorscheme railscasts	" 黒
-colorscheme mustang
-colorscheme deepsea
-colorscheme vendetta
-colorscheme ubaryd
-colorscheme antares
-colorscheme apprentice
-colorscheme pencil
+
+" 不可視文字の表示が明るすぎるカラースキーマ
 colorscheme tender
-
-
+colorscheme pencil
+colorscheme apprentice
+colorscheme antares
+colorscheme ubaryd
+colorscheme vendetta
+colorscheme deepsea
+colorscheme mustang
+colorscheme railscasts	" 黒
+colorscheme buddy
+colorscheme kolor		" 暗めの灰色で落ち着いた感じ
 colorscheme basic-dark	" 黒地に青みがかった灰色
 
 
 
 
-" }}}
 
+
+
+
+" }}}
 
 
 
