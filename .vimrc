@@ -1,1 +1,0 @@
-/home/xc0/work/dotfiles/linux/.vimrc
