@@ -1,9 +1,0 @@
-2017/07/15-18:12:41.008 3474 Reusing MANIFEST /home/xcd0/.config/vivaldi/Default/Session Storage/MANIFEST-000001
-2017/07/15-18:12:41.009 3474 Recovering log #145
-2017/07/15-18:12:41.040 3474 Reusing old log /home/xcd0/.config/vivaldi/Default/Session Storage/000145.log 
-2017/07/15-18:17:18.528 4035 Level-0 table #149: started
-2017/07/15-18:17:19.243 4035 Level-0 table #149: 71317 bytes OK
-2017/07/15-18:17:19.447 4035 Delete type=0 #145
-2017/07/15-18:25:28.293 4035 Level-0 table #151: started
-2017/07/15-18:25:28.374 4035 Level-0 table #151: 65124 bytes OK
-2017/07/15-18:25:28.602 4035 Delete type=0 #148
