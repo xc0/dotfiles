@@ -10,9 +10,137 @@ echo "dotfileのシンボリックリンクを作成します "
 if [ "$(uname)" == 'Darwin' ]; then
 	OS='Mac'
 	dir=~/work/dotfiles/mac
+
+	date=`date +%s`
+	echo "リンク先ファイル一覧"
+	ls -al $dir
+	echo ""
+
+	if [ -L ~/.bash_profile ]; then
+		rm ~/.bash_profile
+	fi
+	if [ -f ~/.bash_profile ]; then
+		echo ".bash_profileが存在します"
+		mv ~/.bash_profile ~/.bash_profile_$date
+		echo ".bash_profile_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.vimrc ]; then
+		rm ~/.vimrc
+	fi
+	if [ -f ~/.vimrc ]; then
+		echo ".vimrcが存在します"
+		mv ~/.vimrc ~/.vimrc_$date
+		echo ".vimrc_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.config/vim ]; then
+		rm ~/.config/vim
+	fi
+	if [ -d ~/.config/vim ]; then
+		echo "~/.config/vimが存在します"
+		mv ~/.config/vim ~/.config/vim_$date
+		echo "~/.config/vim_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.config/nvim ]; then
+		rm ~/.config/nvim
+	fi
+	if [ -d ~/.config/nvim ]; then
+		echo ".config/nvimが存在します"
+		mv ~/.config/nvim ~/.config/nvim_$date
+		echo "~/.config/nvim_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.local/share/fonts ]; then
+		rm ~/.local/share/fonts
+	fi
+	if [ -d ~/.local/share/fonts ]; then
+		echo ".config/nvim~/.local/share/fontsが存在します"
+		mv ~/.local/share/fonts ~/.local/share/fonts_$date
+		echo "~/.local/share/fonts_$dateにリネームしました"
+	fi
+
+	echo "dir is $dir"
+
+	cd ~
+	ln -sf $dir/.bash_profile
+	ln -sf $dir/.vimrc
+
+	cd ~/.config/
+	ln -sf $dir/nvim
+	ln -sf $dir/vim
+
+	cd ~/.local/share
+	ln -sf $dir/fonts
+
+
 elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
 	OS='Linux'
 	dir=~/work/dotfiles/linux
+	date=`date +%s`
+	echo "リンク先ファイル一覧"
+	ls -al $dir
+	echo ""
+
+	if [ -L ~/.bashrc ]; then
+		rm ~/.bashrc
+	fi
+	if [ -f ~/.bashrc ]; then
+		echo ".bashrcが存在します"
+		mv ~/.bashrc ~/.bashrc_$date
+		echo ".bashrc_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.vimrc ]; then
+		rm ~/.vimrc
+	fi
+	if [ -f ~/.vimrc ]; then
+		echo ".vimrcが存在します"
+		mv ~/.vimrc ~/.vimrc_$date
+		echo ".vimrc_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.config/vim ]; then
+		rm ~/.config/vim
+	fi
+	if [ -d ~/.config/vim ]; then
+		echo "~/.config/vimが存在します"
+		mv ~/.config/vim ~/.config/vim_$date
+		echo "~/.config/vim_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.config/nvim ]; then
+		rm ~/.config/nvim
+	fi
+	if [ -d ~/.config/nvim ]; then
+		echo ".config/nvimが存在します"
+		mv ~/.config/nvim ~/.config/nvim_$date
+		echo "~/.config/nvim_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.local/share/fonts ]; then
+		rm ~/.local/share/fonts
+	fi
+	if [ -d ~/.local/share/fonts ]; then
+		echo ".config/nvim~/.local/share/fontsが存在します"
+		mv ~/.local/share/fonts ~/.local/share/fonts_$date
+		echo "~/.local/share/fonts_$dateにリネームしました"
+	fi
+
+	echo "dir is $dir"
+
+	cd ~
+	ln -sf $dir/.bashrc
+	ln -sf $dir/.vimrc
+
+	cd ~/.config/
+	ln -sf $dir/nvim
+	ln -sf $dir/vim
+
+	cd ~/.local/share
+	ln -sf $dir/fonts
+
 elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
 	OS='Cygwin'
 	dir=~/work/dotfiles/cygwin
@@ -20,69 +148,6 @@ else
 	echo "Your platform ($(uname -a)) is not supported."
 	exit 1
 fi
-
-date=`date +%s`
-echo "リンク先ファイル一覧"
-ls -al $dir
-echo ""
-
-if [ -L ~/.bashrc ]; then
-	rm ~/.bashrc
-fi
-if [ -f ~/.bashrc ]; then
-	echo ".bashrcが存在します"
-	mv ~/.bashrc ~/.vimrc_$date
-	echo ".bashrc_$dateにリネームしました"
-fi
-
-if [ -L ~/.vimrc ]; then
-	rm ~/.vimrc
-fi
-if [ -f ~/.vimrc ]; then
-	echo ".vimrcが存在します"
-	mv ~/.vimrc ~/.vimrc_$date
-	echo ".vimrc_$dateにリネームしました"
-fi
-
-if [ -L ~/.config/vim ]; then
-	rm ~/.config/vim
-fi
-if [ -d ~/.config/vim ]; then
-	echo "~/.config/vimが存在します"
-	mv ~/.config/vim ~/.config/vim_$date
-	echo "~/.config/vim_$dateにリネームしました"
-fi
-
-if [ -L ~/.config/nvim ]; then
-	rm ~/.config/nvim
-fi
-if [ -d ~/.config/nvim ]; then
-	echo ".config/nvimが存在します"
-	mv ~/.config/nvim ~/.config/nvim_$date
-	echo "~/.config/nvim_$dateにリネームしました"
-fi
-
-if [ -L ~/.local/share/fonts ]; then
-	rm ~/.local/share/fonts
-fi
-if [ -d ~/.local/share/fonts ]; then
-	echo ".config/nvim~/.local/share/fontsが存在します"
-	mv ~/.local/share/fonts ~/.local/share/fonts_$date
-	echo "~/.local/share/fonts_$dateにリネームしました"
-fi
-
-echo "dir is $dir"
-
-cd ~
-ln -sf $dir/.bashrc
-ln -sf $dir/.vimrc
-
-cd ~/.config/
-ln -sf $dir/nvim
-ln -sf $dir/vim
-
-cd ~/.local/share
-ln -sf $dir/fonts
 
 
 echo -e "\n=======================\n"
