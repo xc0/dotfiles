@@ -1,62 +1,83 @@
 " 2017/07/15/21:22.57 edited.
 
-" よくある設定 {{{
 
+" よくある設定 {{{
 if &compatible
 	set nocompatible               " Be iMproved
 endif
 
-set noreadonly						" 書き込み禁止属性解除
-set encoding=utf-8					" 文字列の文字コードをUTF-8に
-set fileencoding=utf-8				" ファイルの文字コードをUTF-8に
-set autoread						" 編集中のファイルに変更があれば読み込む
-set showcmd							" 入力中のコマンドを表示
-set cursorline						" 現在の行を強調表示
-set cursorcolumn					" 現在の列を強調表示
-set wildmode=list:longest			" コマンドラインの補完
-set display=lastline				" 
-set title							" 開いているファイル名を表示
-set showmatch						" 
-set matchtime=1						" 
-set clipboard=unnamed				" クリップボードの共有
-"set clipboard+=unnamed				" こっちのほうがいいらしい
-set nowrapscan						" 検索時、末尾から先頭に戻らない
-set wrapscan						" 検索時、末尾から先頭に戻る
-set noignorecase					" 大文字/小文字の区別して検索する
-set ignorecase						" 大文字/小文字の区別なく検索する
-set smartcase						" 検索文字列に大文字が含まれている場合は区別して検索する
-set incsearch						" 
-set hlsearch						" 
-set whichwrap=h,l					" 
-set nocindent						" 
-set noautoindent					" 
-set smartindent						" set nosmartindent		" 
-set tabstop=4						" 
-set shiftwidth=4					" 自動インデントでずれる幅
-set noexpandtab						" TABを空白に展開しない
-set backspace=indent,eol,start		" バックスペースでインデントや改行を削除できるようにする
-set formatoptions+=mM				" テキスト挿入中の自動折り返しを日本語に対応させる
-set ambiwidth=double				" 全角文字の幅を2に固定する。文脈によって意味が異なる。
-set noswapfile						" swapファイルを作らない
-set visualbell						" beepを可視化
-set number							" 行番号表示
-set ruler							" ルーラーを表示
-set list							" 不可視文字を表示
-set listchars=tab:>-,trail:>,nbsp:%,extends:>,precedes:<,eol:↲	" 不可視文字の表示設定
-set matchpairs& matchpairs+=<:> 	" 対応括弧に<と>のペアを追加
-cmap w!! w !sudo tee > /dev/null %	" w!!でrootとして保存
-set hidden							" ファイルが未保存でも他のファイルを開けるようにする
-set history=2000					"
-syntax on							" シンタックスハイライト
-set termguicolors					" TrueColor
-set foldmethod=marker				" 折りたたむ
+" NeoBundle時代の古い記述
+" いるのかわからない
+augroup vimrc-checktime
+  autocmd!
+  autocmd winenter * checktime
+augroup end
 
-if (exists('+colorcolumn'))			" 80カラムを強調
+set noreadonly
+set autoread
+set encoding=utf-8
+set fileencoding=utf-8
+set noautoindent
+set nosmartindent
+set cindent
+set tabstop=4
+set shiftwidth=4
+set title
+set showmatch
+set display=lastline
+set showmatch
+set matchtime=1
+"set clipboard=unnamed
+set clipboard+=unnamed
+set smartcase
+"set wrap
+set nowrap
+set number
+set ruler
+set list
+set listchars=tab:>-,trail:>,nbsp:%,extends:>,precedes:<,eol:<
+set backspace=indent,eol,start	" バックスペースで各種消せるようにする
+set incsearch
+set hlsearch
+set whichwrap=h,l
+set nowrapscan
+"set ignorecase
+set noignorecase	" 大文字小文字を区別する
+set hidden
+set history=2000
+set noexpandtab
+set helplang=en
+set matchpairs& matchpairs+=<:> "対応括弧に<と>のペアを追加
+set foldmethod=marker
+cmap w!! w !sudo tee > /dev/null %  "w!!でrootとして保存
+
+if has('win32unix') && &term =~# '^xterm' && &t_Co < 256
+  set t_Co=256  " Extend cygwin terminal color
+endif
+
+augroup swapchoice-readonly
+  autocmd!
+  autocmd SwapExists * let v:swapchoice = 'o'
+augroup END
+
+if has('win32unix')
+  let &t_ti .= "\e[1 q"
+  let &t_SI .= "\e[5 q"
+  let &t_EI .= "\e[1 q"
+  let &t_te .= "\e[0 q"
+endif
+
+
+"色設定
+hi SpecialKey ctermfg=237 guifg=#3a3a3a
+hi NonText ctermfg=66 guifg=#5f8787
+
+if (exists('+colorcolumn'))		" 80カラムを強調
 	set colorcolumn=80
 	highlight ColorColumn ctermbg=9
 endif
 
-" }}}
+"}}}
 
 
 " dein.vim {{{
@@ -227,7 +248,7 @@ colorscheme buddy
 colorscheme kolor		" 暗めの灰色で落ち着いた感じ
 colorscheme basic-dark	" 黒地に青みがかった灰色
 
-
+colorscheme molokai
 
 
 

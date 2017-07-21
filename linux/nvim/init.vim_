@@ -2,7 +2,10 @@
 
 " よくある設定 {{{
 
-set nocompatible					" 互換モードoff
+if &compatible
+	set nocompatible               " Be iMproved
+endif
+
 set noreadonly						" 書き込み禁止属性解除
 set encoding=utf-8					" 文字列の文字コードをUTF-8に
 set fileencoding=utf-8				" ファイルの文字コードをUTF-8に
@@ -46,6 +49,10 @@ set hidden							" ファイルが未保存でも他のファイルを開ける�
 set history=2000					"
 syntax on							" シンタックスハイライト
 set termguicolors					" TrueColor
+set foldmethod=marker				" 折りたたむ
+
+hi SpecialKey ctermfg=237 guifg=#3a3a3a
+hi NonText ctermfg=66 guifg=#5f8787
 
 if (exists('+colorcolumn'))			" 80カラムを強調
 	set colorcolumn=80
@@ -58,112 +65,74 @@ endif
 " dein.vim {{{
 
 " dein のインストール方法
-" 他のプラグインとは違うインストールディレクトリを決めて以下のコマンドを実行
+" インストールディレクトリを決めて以下のコマンドを実行
 " $ curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
 " $ sh ./installer.sh {specify the installation directory}
 
 "dein Scripts-----------------------------
-if &compatible
-  set nocompatible               " Be iMproved
+"
+let OSTYPE = system('uname')
+if OSTYPE == "Darwin\n"
+	set runtimepath+=/Users/xc0/.config/nvim/dein/repos/github.com/Shougo/dein.vim
+	if dein#load_state('/Users/xc0/.config/nvim/dein')
+		call dein#begin('/Users/xc0/.config/nvim/dein')
+
+		" Let dein manage dein
+		" Required:
+		call dein#add('/Users/xc0/.config/nvim/dein/repos/github.com/Shougo/dein.vim')
+
+		call dein#add('Shougo/neosnippet.vim')
+		call dein#add('Shougo/neosnippet-snippets')
+
+		" toml
+		let g:rc_dir		= expand("~/.config/nvim")
+		let s:toml		= g:rc_dir . '/dein.toml'
+		let s:lazy_toml	= g:rc_dir . '/dein_lazy.toml'
+
+		" read toml and cache
+		call dein#load_toml(s:toml,			{'lazy':0})
+		call dein#load_toml(s:lazy_toml,	{'lazy':0})
+
+		call dein#end()
+		call dein#save_state()
+	endif
+elseif OSTYPE == "Linux\n"
+	set runtimepath+=/home/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+	if dein#load_state($HOME . '/.config/vim/dein')
+		call dein#begin($HOME . '/.config/vim/dein')
+
+		" Let dein manage dein  Required:
+		call dein#add($HOME . '/.config/vim/dein/repos/github.com/Shougo/dein.vim')
+
+		call dein#add('Shougo/neosnippet.vim')
+		call dein#add('Shougo/neosnippet-snippets')
+
+		" toml
+		let g:rc_dir		= expand("~/.config/vim")
+		let s:toml		= g:rc_dir . '/dein.toml'
+		let s:lazy_toml	= g:rc_dir . '/dein_lazy.toml'
+
+		" read toml and cache
+		call dein#load_toml(s:toml,			{'lazy':0})
+		call dein#load_toml(s:lazy_toml,	{'lazy':0})
+
+		call dein#end()
+		call dein#save_state()
+	endif
+else
+	echo OSTYPE
 endif
 
-" Required:
-set runtimepath+=/home/xcd0/work/dotfiles/linux/.config/nvim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
-
-" Required:
-if dein#load_state('/home/xcd0/work/dotfiles/linux/.config/nvim/dein')
-  call dein#begin('/home/xcd0/work/dotfiles/linux/.config/nvim/dein')
-
-  " Let dein manage dein
-  " Required:
-  call dein#add('/home/xcd0/work/dotfiles/linux/.config/nvim/dein/repos/github.com/Shougo/dein.vim')
-
-  " Add or remove your plugins here:
-  call dein#add('Shougo/neosnippet.vim')
-  call dein#add('Shougo/neosnippet-snippets')
-  let s:toml = '~/.config/nvim/dein-plugin.toml'
-
-  " You can specify revision/branch/tag.
-  call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
-
-  " Required:
-  call dein#end()
-  call dein#save_state()
-endif
 
 " Required:
 filetype plugin indent on
 syntax enable
 
-" If you want to install not installed plugins on startup.
-"if dein#check_install()
-"  call dein#install()
-"endif
-
-"End dein Scripts-------------------------
-
-call dein#begin(expand("~/.cache/dein"))
-call dein#add('Shougo/denite.nvim')			" 
-call dein#add('Shougo/deoplete.nvim')		" 補完
-call dein#add('zchee/deoplete-go')			" golang
-call dein#add('landaire/deoplete-swift')	" swift
-call dein#add('zchee/deoplete-clang')		" C/C++/Obj-C/Obj-C++ 
-call dein#add('carlitux/deoplete-ternjs')	" javascript
-call dein#add('Shougo/deoplete-rct')		" ruby
-call dein#add('poppyschmo/deoplete-latex')	" latex
-call dein#add('neomake/neomake')			" 外部コマンドを非同期実行
-
-" colorscheme
-call dein#add('flazz/vim-colorschemes')		" カラースキーマいっぱい
-call dein#add('romainl/Apprentice')			" 
-call dein#add('jacoborus/tender.vim')		" 
-call dein#add('reedes/vim-colors-pencil')	" 
-call dein#add('freeo/vim-kalisi')			" 
-"call dein#add('AlessandroYorba/Alduin')			" 
-call dein#add('Haron-Prime/Antares')			" 
-call dein#add('bluz71/vim-moonfly-colors')			" 
-call dein#add('NewProggie/NewProggie-Color-Scheme')			" 
-call dein#add('zcodes/vim-colors-basic')			" 
-call dein#add('ayu-theme/ayu-vim')			" 
-call dein#add('dracula/vim')			" 
-call dein#add('fcpg/vim-fahrenheit')			" 
-call dein#add('joshdick/onedark.vim')			" 
-call dein#add('Donearm/Ubaryd')			" 
-call dein#add('jyota/vimColors')			" 
-call dein#add('DrSpatula/vim-buddy')			" 
-call dein#add('evgenyzinoviev/vim-vendetta')			" 
-call dein#add('hewo/vim-colorscheme-deepsea')			" 
-call dein#add('croaker/mustang-vim')			" 
-call dein#add('vim-scripts/inkpot')			" 
-call dein#add('lxmzhv/vim')			" 
-call dein#add('goatslacker/mango.vim')			" 
-call dein#add('jpo/vim-railscasts-theme')		" 
-call dein#add('justincampbell/vim-railscasts')		" 
-call dein#add('zeis/vim-kolor')			" 
-call dein#add('ninja/sky')			" 
-
-call dein#add('fatih/vim-go')				" golang support
-set rtp+=$GOROOT/misc/vim
-exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim”)")
-set completeopt=menu,preview
-
-call dein#add('tomasr/molokai')				" molokai
-call dein#add('rking/ag.vim')				" 行末ホワイトスペース削除
-call dein#add('mattn/emmet-vim')			" html,css,xml support
-call dein#add('LeafCage/yankround.vim')		" クリップボード拡張
-nmap p <Plug>(yankround-p)
-nmap P <Plug>(yankround-P)
-nmap <C-p> <Plug>(yankround-prev)
-nmap <C-n> <Plug>(yankround-next)
-let g:yankround_max_history = 100
-nnoremap <Leader><C-p> :<C-u>Denite yankround<CR>
-
-"call dein#add('')				" 
-
 if dein#check_install()
 	call dein#install()
 endif
-call dein#end()
+
+"End dein Scripts-------------------------
 
 " }}}
 
@@ -202,12 +171,14 @@ nnoremap q <Nop>
 nnoremap j gj
 nnoremap k gk
 inoremap jj <ESC>
-
-nmap <Esc><Esc> :nohlsearch<CR><Esc>	" ESC連打でハイライト解除
-
+nmap <Esc><Esc> :noh<CR><Esc>	" ESC連打でハイライト解除
 
 nnoremap s4t :%s/\s\s\s\s/\t/g<CR><ESC>		" スペース4をタブに置換
 nnoremap s2t :%s/\s\s/\t/g<CR><ESC>			" スペース2をタブに置換
+
+nnoremap <TAB>dt a<C-r>=strftime("%Y/%m/%d/%H:%M")<CR><ESC>		" 日時挿入
+nnoremap <Space>dt gg0O<C-r>=strftime("%Y/%m/%d/%H:%M.%S")<CR> edited.<ESC>gci0		" 日時挿入 caw.vimを使ってる
+
 
 nnoremap <TAB>f :<C-u>VimFilerBufferDir -split -simple -winwidth=35 -no-quit -toggle<CR><ESC>
 
@@ -216,10 +187,12 @@ nnoremap <TAB>n gt		" 次のタブに移動
 nnoremap <TAB>p gT		" 前のタブに移動
 nnoremap <TAB>w <C-w>w		" TABwにウィンドウ切り替えを割り当て
 
-nnoremap <TAB>dt a<C-r>=strftime("%Y/%m/%d/%H:%M")<CR><ESC>		" 日時挿入
-nnoremap <Space>dt gg0O# <C-r>=strftime("%Y/%m/%d/%H:%M.%S")<CR> edited.<ESC>0	" 日時挿入
+
 
 " }}}
+
+
+" color scheme {{{
 
 "colorscheme alduin
 "colorscheme dracula
@@ -227,37 +200,44 @@ nnoremap <Space>dt gg0O# <C-r>=strftime("%Y/%m/%d/%H:%M.%S")<CR> edited.<ESC>0	"
 "colorscheme mango
 "colorscheme inkpot
 "colorscheme scooby		" ハイライトが強すぎて見えない
+"colorscheme newproggie	" コメント緑で微妙
+
+colorscheme eva			" オレンジ
+colorscheme fahrenheit	" コーラ
+colorscheme moonfly
+
+colorscheme ayu			" 暗めの藍にオレンジ
+colorscheme onedark		" 鞍目の藍に紫
+
 
 colorscheme koehler		" 黒地に赤黃でそれなり
 colorscheme evening		" 灰色で落ち着いた感じ
 colorscheme slate		" 暗めの灰色で少しはっきりした感じ
 colorscheme kalisi
 
-colorscheme kolor		" 暗めの灰色で落ち着いた感じ
-colorscheme buddy
-colorscheme railscasts	" 黒
-colorscheme mustang
-colorscheme deepsea
-colorscheme vendetta
-colorscheme ubaryd
-colorscheme antares
-colorscheme apprentice
-colorscheme pencil
-colorscheme tender
 
+" 不可視文字の表示が明るすぎるカラースキーマ
+colorscheme tender
+colorscheme pencil
+colorscheme apprentice
+colorscheme antares
+colorscheme ubaryd
+colorscheme vendetta
+colorscheme deepsea
+colorscheme mustang
+colorscheme railscasts	" 黒
+colorscheme buddy
+colorscheme kolor		" 暗めの灰色で落ち着いた感じ
 colorscheme basic-dark	" 黒地に青みがかった灰色
 
-colorscheme eva			" オレンジ
-
-colorscheme moonfly
-
-colorscheme fahrenheit	" コーラ
-colorscheme newproggie
-
-colorscheme onedark		" 青みがかった灰色
-colorscheme ayu			" 暗めの藍
+colorscheme molokai
 
 
+
+
+
+
+" }}}
 
 
 
