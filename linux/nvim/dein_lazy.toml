@@ -57,8 +57,8 @@ repo = 'rking/ag.vim'				# 行末ホワイトスペース削除
 repo = 'mattn/emmet-vim'			# html,css,xml support
 [[plugins]]
 repo = 'fatih/vim-go'				# golang support
-[[plugins]]
-repo = 	'yuratomo/w3m.vim'			# w3m
+#[[plugins]]
+#repo = 	'yuratomo/w3m.vim'			# w3m
 
 #}}}
 

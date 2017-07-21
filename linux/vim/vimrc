@@ -82,7 +82,6 @@ endif
 "}}}
 
 
-
 " dein.vim {{{
 
 " dein のインストール方法
@@ -94,7 +93,6 @@ endif
 "
 let OSTYPE = system('uname')
 if OSTYPE == "Darwin\n"
-	echo "mac"
 	set runtimepath+=/Users/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim
 	if dein#load_state('/Users/xc0/.config/vim/dein')
 		call dein#begin('/Users/xc0/.config/vim/dein')
@@ -119,7 +117,6 @@ if OSTYPE == "Darwin\n"
 		call dein#save_state()
 	endif
 elseif OSTYPE == "Linux\n"
-	echo "linux"
 	set runtimepath+=/home/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
 	if dein#load_state($HOME . '/.config/vim/dein')
 		call dein#begin($HOME . '/.config/vim/dein')
@@ -160,8 +157,8 @@ endif
 " }}}
 
 
-
-" キー割り当て変更 {{{
+" TAB {{{
+" キー割り当て変更 
 "キー割り当て変更コマンドは、下のように、モードごと、再割当(remap)の有無によって別の名前が割り当てられています。
 "再割当無し	再割当有り	モード
 "noremap		map		ノーマルモード＋ビジュアルモード
@@ -170,6 +167,24 @@ endif
 "vnoremap	vmap	ビジュアル(選択)モード
 "cnoremap	cmap	コマンドラインモード
 "inoremap	imap	インサート(挿入)モード
+
+
+nnoremap <TAB>q swhq
+nnoremap <TAB>f :<C-u>VimFilerBufferDir -split -simple -winwidth=35 -no-quit -toggle<CR>
+nnoremap <TAB>v :<C-u>Vaffle<CR>
+
+nnoremap <TAB>t :<C-u>tabnew<CR><ESC>	" TAB-tに新規タブ作成を割り当て
+nnoremap <TAB>n gt						" 次のタブに移動
+nnoremap <TAB>p gT						" 前のタブに移動
+nnoremap <TAB>w <C-w>w					" TABwにウィンドウ切り替えを割り当て
+
+nnoremap <TAB>dt a<C-r>=strftime("%Y/%m/%d/%H:%M")<CR><ESC>		" 日時挿入
+nnoremap <Space>dt gg0O<C-r>=strftime("%Y/%m/%d/%H:%M.%S")<CR> edited.<ESC>0gci		" 日時挿入
+
+" }}}
+
+
+" others {{{
 
 " ウィンドウ間の移動
 nnoremap swj <C-w>j
@@ -208,18 +223,7 @@ nnoremap vp :<C-u>VimShellPop<CR><ESC>
 autocmd BufRead,BufNewFile *.py setfiletype python
 autocmd FileType python setl inoremap # <ESC>0i#<ESC>wi
 
-"nnoremap <TAB>f :<C-u>VimFilerBufferDir -split -simple -winwidth=35 -no-quit -toggle<CR>
-
-nnoremap <TAB>t :<C-u>tabnew<CR><ESC>	" TAB-tに新規タブ作成を割り当て
-nnoremap <TAB>n gt						" 次のタブに移動
-nnoremap <TAB>p gT						" 前のタブに移動
-nnoremap <TAB>w <C-w>w					" TABwにウィンドウ切り替えを割り当て
-
-nnoremap <TAB>dt a<C-r>=strftime("%Y/%m/%d/%H:%M")<CR><ESC>		" 日時挿入
-nnoremap <Space>dt gg0O<C-r>=strftime("%Y/%m/%d/%H:%M.%S")<CR> edited.<ESC>0gci		" 日時挿入
-
 " }}}
-
 
 
 

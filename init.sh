@@ -3,15 +3,66 @@
 # クリーンインストールしたら
 # とりあえず最初に実行しとけ
 
-# dotfiles {{{
+# 関数
+mkUsr(){ # {{{
+	if [ -d ~/work/usr ]; then
+		echo -n ""
+	else
+		mkdir ~/work/usr
+	fi
+	if [ -d ~/work/bin ]; then
+		echo -n ""
+	else
+		mkdir ~/work/bin
+	fi
+	if [ -d ~/work/usr/local ]; then
+		echo -n ""
+	else
+		mkdir ~/work/usr/local
+	fi
+	if [ -d ~/work/usr/local/bin ]; then
+		echo -n ""
+	else
+		mkdir ~/work/usr/local/bin
+	fi
+} # }}}
 
-echo -e "\n=======================\n"
-echo "dotfileのシンボリックリンクを作成します "
-if [ "$(uname)" == 'Darwin' ]; then
+mkSLink(){ # {{{
+	echo -e "\n=======================\n"
+	echo "dotfileのシンボリックリンクを作成します "
+
+	if [ "$(uname)" == 'Darwin' ]; then
+		mkSLink_mac()
+
+	elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
+		mkSLink_linux()
+
+	elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
+		mkSlink_cygwin()
+	else
+		echo "Your platform ($(uname -a)) is not supported."
+		exit 1
+	fi
+
+	echo ""
+	echo "$HOME"
+	ls -al ~ | grep .bashrc
+	ls -al ~ | grep .vimrc
+	echo ""
+	echo "~/.config/vim"
+	ls -al ~/.config/vim
+	echo ""
+	echo "~/.config/nvim"
+	ls -al ~/.config/nvim
+
+	echo -e "\n=======================\n"
+	echo "シンボリックリンクを作成しました"
+} # }}}
+
+mkSLink_mac(){ #{{{
 	OS='Mac'
 	dir=~/work/dotfiles/mac
 
-	date=`date +%s`
 	echo "リンク先ファイル一覧"
 	ls -al $dir
 	echo ""
@@ -73,12 +124,11 @@ if [ "$(uname)" == 'Darwin' ]; then
 
 	cd ~/.local/share
 	ln -sf $dir/fonts
+} # }}}
 
-
-elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
+mkSLink_linux(){ # {{{
 	OS='Linux'
 	dir=~/work/dotfiles/linux
-	date=`date +%s`
 	echo "リンク先ファイル一覧"
 	ls -al $dir
 	echo ""
@@ -140,94 +190,76 @@ elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
 
 	cd ~/.local/share
 	ln -sf $dir/fonts
+} # }}}
 
-elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
+mkSLink_cygwin(){ # {{{
 	OS='Cygwin'
 	dir=~/work/dotfiles/cygwin
-else
-	echo "Your platform ($(uname -a)) is not supported."
-	exit 1
-fi
+	echo "未実装"
+} # }}}
 
-
-echo -e "\n=======================\n"
-echo "シンボリックリンクを作成しました"
-
-
-echo ""
-echo "$HOME"
-ls -al ~ | grep .bashrc
-ls -al ~ | grep .vimrc
-echo ""
-echo "~/.config/vim"
-ls -al ~/.config/vim
-echo ""
-echo "~/.config/nvim"
-ls -al ~/.config/nvim
-
-# }}}
-
-echo -n "goの設定までスキップしますか？ (Y/n) : "
-read check
-start=`date +%s`
-
-if [ "${check}" == "n" ]; then
-
-
-# gitSetting {{{
-count=0
-while true; do
-	echo -n "gitの初期設定をしますか？ (y/N) : "
-	read check
-	if [ "${check}" == "y" ]; then
-		echo "gitの設定をします"
-		~/work/dotfiles/gitSetting.sh
-		if [ "${?}" == "0" ]; then
-			echo "gitの設定が正常終了しました"
-			echo "アプリケーションのインストールを始めます"
-			break
+gitSetting(){ # {{{
+	count=0
+	while true; do
+		echo -n "gitの初期設定をしますか？ (y/N) : "
+		read check
+		if [ "${check}" == "y" ]; then
+			echo "gitの設定をします"
+			~/work/dotfiles/gitSetting.sh
+			if [ "${?}" == "0" ]; then
+				echo "gitの設定が正常終了しました"
+				echo "アプリケーションのインストールを始めます"
+				break
+			else
+				echo "gitの設定が正しく終了しませんでした"
+				continue
+			fi
 		else
-			echo "gitの設定が正しく終了しませんでした"
-			continue
+			echo "gitの設定をスキップします"
+			break
 		fi
+	done
+} # }}}
+
+appInstall() { #{{{
+	count=0
+	while true; do
+		echo -n "このファイルinit.shは~/work/dotfilesに置かれていますか？ (y/n) : "
+		read check
+		if [ "${check}" == "n" ]; then
+			echo "init.shは~/work/dotfiles/init.shに置かれなければなりません"
+			echo "正しい位置に置いてください"
+			echo "mkdir ~/work"
+			echo "cd ~/work"
+			echo "git clone http://git:kumamon@git.xcd0.com/git/dot.git"
+			echo "でできます"
+			echo "異常終了します"
+			exit 1
+		else
+			break
+		fi
+	done
+
+	count=0
+
+	if [ "$(uname)" == 'darwin' ]; then
+		appInstall_mac()
+	elif [ "$(expr substr $(uname -s) 1 5)" == 'linux' ]; then
+		appInstall_linux()
+	elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
+		appInstall_cygwin()
 	else
-		echo "gitの設定をスキップします"
-		break
-	fi
-done
-
-# }}}
-
-
-# よく使うアプリケーションのインストール {{{
-count=0
-
-while true; do
-	echo -n "このファイルinit.shは~/work/dotfilesに置かれていますか？ (Y/n) : "
-	read check
-	if [ "${check}" == "n" ]; then
-		echo "init.shは~/work/dotfiles/init.shに置かれなければなりません"
-		echo "正しい位置に置いてください"
-		echo "mkdir ~/work"
-		echo "cd ~/work"
-		echo "git clone http://git:kumamon@git.xcd0.com/git/dot.git"
-		echo "でできます"
-		echo "異常終了します"
+		echo "Your platform ($(uname -a)) is not supported."
 		exit 1
-	else
-		break
 	fi
-done
+} # }}}
 
-count=0
-
-
-if [ "$(uname)" == 'Darwin' ]; then
-	OS='Mac'
-	echo -n "Macですね? (Y/n) : "
+appInstall_mac() { #{{{
+	os='mac'
+	echo -n "macですね? (y/n) : "
 	read check
 	if [ "${check}" == "n" ]; then
-		echo "まじっすか... OSが判断できませんでした"
+		echo "まじっすか... osが判断できませんでした"
 		echo "手作業で実行してください"
 		echo "異常終了します"
 		exit 1
@@ -235,9 +267,11 @@ if [ "$(uname)" == 'Darwin' ]; then
 		echo "未実装"
 		break
 	fi
-elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
-	OS='Linux'
-	echo "Debian系のみ実行してね♥ (RHEL? 知らない子ですね)"
+} # }}}
+
+appInstall_linux() { #{{{
+	os='linux'
+	echo "debian系のみ実行してね♥ (rhel? 知らない子ですね)"
 	echo -n "Linuxですね? (Y/n) : "
 	read check
 	if [ "${check}" == "n" ]; then
@@ -286,8 +320,9 @@ elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
 	sudo aptitude update > /dev/null 2>&1
 	echo "neovimをインストールします"
 	sudo aptitude install -y neovim
+} # }}}
 
-elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
+appInstall_cygwin() { #{{{
 	OS='Cygwin'
 	echo -n "windowsですね? (Y/n) : "
 	read check
@@ -300,40 +335,132 @@ elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
 		echo "未実装"
 		break
 	fi
-else
-	echo "Your platform ($(uname -a)) is not supported."
-	exit 1
+} # }}}
+
+pyenvInstall(){ # {{{
+	# pyenv
+	echo -e "\n=======================\n"
+	echo "pyenvをインストールします"
+	curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+} # }}}
+
+rbenvInstall(){ # {{{
+	# rbenv
+	echo -e "\n=======================\n"
+	echo "rbenvをインストールします"
+	git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+	git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+} # }}}
+
+
+goLastBuild(){ # {{{
+	echo -e "\n=======================\n"
+	echo "最新版のgolangをビルドします"
+
+	rm -rf $HOME/go1.4
+	ln -sf $godir/go1.4 $HOME
+
+	cd $godir/go/src
+
+	if [ "$(uname)" == 'Darwin' ]; then
+		./all.bash
+	elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
+		./all.bash
+	elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
+		./all.bat
+	fi
+
+	rm -rf $HOME/go1.4
+
+	echo -e "\n=======================\n"
+	echo "最新版のgolangのビルドが完了しました"
+
+	PATH=$godir/go/bin:$PATH
+	which go
+	echo "最新版のgoをインストールしました"
+	echo -n "go version : "
+	go version
+} # }}}
+
+# 実際の処理
+
+date=`date +%s`
+
+# シンボリックリンクの作成
+mkSLink()
+
+
+echo -n "goの設定までスキップしますか？ (Y/n) : "
+read check
+if [ "${check}" == "n" ]; then
+	gitSetting()
+	appInstall()
+	pyenvInstall()
+	rbenvInstall()
 fi
-
-#for f in `ls $dir`; do
-#done
-
-
-# OS共通
-
-# pyenv
-echo -e "\n=======================\n"
-echo "pyenvをインストールします"
-curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-
-# rbenv
-echo -e "\n=======================\n"
-echo "rbenvをインストールします"
-git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
-git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
-
-# }}}
-
-
-fi
-
-# golang {{{
 
 echo -e "\n=======================\n"
 echo "goの最新版をビルドします"
 
-mkdir ~/work/go/
-cd ~/work/go
+flag=0		# 1 なら最新版をビルド
+flag2=0		# goがあるか あるならどこにあるか
+a=`which go | wc -l`
+if [ "${a}" != "0" ]; then
+	echo "goが存在します"
+	echo -n "go version : "
+	go version
+	echo -n "最新版に更新しますか? (y/N) : "
+	read check
+	if [ "${check}" == "y" ]; then
+		flag=1
+		if [ -d ~/work/go/go/.git ]; then
+			flag2=1
+			echo "~/work/go/go/.gitが存在します"
+			ehco "go を pull します"
+			cd ~/work/go/go
+			echo "git pull origin master"
+			git pull origin master
+			echo "git reset --hard HEAD"
+			git reset --hard HEAD
+		elif
+			echo "~/work/go/go/.gitが存在しません"
+			if [ -d ~/work/go ]; then
+				cd ~/work/go
+				echo "~/work/go/が存在します"
+				mv ~/work/go/ ~/work/go_$date
+				echo "~/work/go/を~/work/go_$dateに変更しました"
+				echo "goの最新版をダウンロードします"
+				echo "git clone https://github.com/golang/go"
+				git clone https://github.com/golang/go
+			else
+				echo "~/work/go/が存在しません"
+				echo "~/work/go/を作成します"
+				mkdir ~/work/go/
+				cd ~/work/go
+				echo "goの最新版をダウンロードします"
+				echo "git clone https://github.com/golang/go"
+				git clone https://github.com/golang/go
+			fi
+		fi
+	else
+		mkUsr()
+	fi
+else
+	echo "goが存在しません"
+	echo -n "goをインストールしますか? (y/N) : "
+	read check
+	if [ "${check}" == "y" ]; then
+			else
+				echo "~/work/go/が存在しません"
+				echo "~/work/go/を作成します"
+				mkdir ~/work/go/
+				cd ~/work/go
+				echo "goの最新版をダウンロードします"
+				echo "git clone https://github.com/golang/go"
+				git clone https://github.com/golang/go
+			fi
+fi
+
 
 if [ -d ~/work/go/go ]; then
 	echo "~/work/go/goが存在します"
@@ -383,9 +510,27 @@ which go
 go version
 
 
-if [ -d ~/work/go/go/bin ]; then
+
+if [ -d ~/work/go/bin ]; then
+	flag=1
+	echo "~/work/go/binが存在します"
+elif [ -d ~/work/go/ ]; then
+	flag=1
+	echo "~/work/go/が存在します"
+fi
+	echo "~/work/go/が存在します"
+if [ -d ~/work/go/ ]; then
+	flag=1
+	echo "~/work/go/が存在します"
+	echo -n "ビルドし直しますか? (y/N) : "
+	read check
+	if [ "${check}" == "y" ]; then
+		flag=0
+	fi
+elif [ -d ~/work/go/go ]; then
 	flag=1
 	echo "~/work/go/goが存在します"
+	echo -n "~/work/go/go/
 	echo -n "ビルドし直しますか? (y/N) : "
 	read check
 	if [ "${check}" == "y" ]; then
@@ -396,58 +541,9 @@ else
 fi
 
 if [ "${flag}" == "0" ]; then
-
-	echo -e "\n=======================\n"
-	echo "最新版のgolangをビルドします"
-
-	rm -rf $HOME/go1.4
-	ln -sf $godir/go1.4 $HOME
-
-	cd $godir/go/src
-
-	if [ "$(uname)" == 'Darwin' ]; then
-		./all.bash
-	elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
-		./all.bash
-	elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
-		./all.bat
-	fi
-
-	rm -rf $HOME/go1.4
-
-	echo -e "\n=======================\n"
-	echo "最新版のgolangのビルドが完了しました"
+	goLastBuild()
 fi
 
-
-PATH=$godir/go/bin:$PATH
-which go
-go version
-
-
-cd ~
-if [ -d ~/work/usr ]; then
-	echo -n ""
-else
-	mkdir ~/work/usr
-fi
-if [ -d ~/work/bin ]; then
-	echo -n ""
-else
-	mkdir ~/work/bin
-fi
-if [ -d ~/work/usr/local ]; then
-	echo -n ""
-else
-	mkdir ~/work/usr/local
-fi
-if [ -d ~/work/usr/local/bin ]; then
-	echo -n ""
-else
-	mkdir ~/work/usr/local/bin
-fi
-
-# }}}
 
 
 echo -e "\n=======================\n"

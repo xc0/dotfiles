@@ -62,48 +62,74 @@ endif
 " dein.vim {{{
 
 " dein のインストール方法
-" 他のプラグインとは違うインストールディレクトリを決めて以下のコマンドを実行
+" インストールディレクトリを決めて以下のコマンドを実行
 " $ curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
 " $ sh ./installer.sh {specify the installation directory}
 
 "dein Scripts-----------------------------
+"
+let OSTYPE = system('uname')
+if OSTYPE == "Darwin\n"
+	set runtimepath+=/Users/xc0/.config/nvim/dein/repos/github.com/Shougo/dein.vim
+	if dein#load_state('/Users/xc0/.config/nvim/dein')
+		call dein#begin('/Users/xc0/.config/nvim/dein')
 
-" Required:
-set runtimepath+=$HOME/.config/nvim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+		" Let dein manage dein
+		" Required:
+		call dein#add('/Users/xc0/.config/nvim/dein/repos/github.com/Shougo/dein.vim')
 
-if dein#load_state($HOME . '/.config/nvim/dein')		" Required:
-	call dein#begin($HOME . '/.config/nvim/dein')
+		call dein#add('Shougo/neosnippet.vim')
+		call dein#add('Shougo/neosnippet-snippets')
 
-	" Let dein manage dein (Required)
-	call dein#add($HOME .'.config/nvim/dein/repos/github.com/Shougo/dein.vim')
+		" toml
+		let g:rc_dir		= expand("~/.config/nvim")
+		let s:toml		= g:rc_dir . '/dein.toml'
+		let s:lazy_toml	= g:rc_dir . '/dein_lazy.toml'
 
-	" You can specify revision/branch/tag.
-	call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
+		" read toml and cache
+		call dein#load_toml(s:toml,			{'lazy':0})
+		call dein#load_toml(s:lazy_toml,	{'lazy':0})
 
-	" toml
-	let g:rc_dir		= expand("~/.config/nvim")
-	let s:toml		= g:rc_dir . '/dein.toml'
-	let s:lazy_toml	= g:rc_dir . '/dein_lazy.toml'
+		call dein#end()
+		call dein#save_state()
+	endif
+elseif OSTYPE == "Linux\n"
+	set runtimepath+=/home/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+	if dein#load_state($HOME . '/.config/vim/dein')
+		call dein#begin($HOME . '/.config/vim/dein')
 
-	" read toml and cache
-	call dein#load_toml(s:toml,			{'lazy':0})
-	call dein#load_toml(s:lazy_toml,	{'lazy':0})
+		" Let dein manage dein  Required:
+		call dein#add($HOME . '/.config/vim/dein/repos/github.com/Shougo/dein.vim')
 
+		call dein#add('Shougo/neosnippet.vim')
+		call dein#add('Shougo/neosnippet-snippets')
 
-	" Required:
-	call dein#end()
-	call dein#save_state()
+		" toml
+		let g:rc_dir		= expand("~/.config/vim")
+		let s:toml		= g:rc_dir . '/dein.toml'
+		let s:lazy_toml	= g:rc_dir . '/dein_lazy.toml'
+
+		" read toml and cache
+		call dein#load_toml(s:toml,			{'lazy':0})
+		call dein#load_toml(s:lazy_toml,	{'lazy':0})
+
+		call dein#end()
+		call dein#save_state()
+	endif
+else
+	echo OSTYPE
 endif
 
-filetype plugin indent on		" Required:
+
+" Required:
+filetype plugin indent on
 syntax enable
-
-
-"End dein Scripts-------------------------
 
 if dein#check_install()
 	call dein#install()
 endif
+
+"End dein Scripts-------------------------
 
 " }}}
 
