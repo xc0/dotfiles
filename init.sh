@@ -2,8 +2,7 @@
 
 version=0.2
 
-# 関数 {{{2
-
+# 関数群 {{{2
 osCheck(){ # {{{
 	if [ "$(uname)" == "Darwin" ]; then
 		OS='Mac'
@@ -16,7 +15,6 @@ osCheck(){ # {{{
 		exit 1
 	fi
 } # }}}
-
 mkUsr(){ # {{{
 	if [ -d ~/work/usr ]; then
 		echo -n ""
@@ -39,7 +37,6 @@ mkUsr(){ # {{{
 		mkdir ~/work/usr/local/bin
 	fi
 } # }}}
-
 # シンボリックリンクの作成 {{{1
 mkSLink_mac(){ #{{{
 	dir=~/work/dotfiles/mac
@@ -206,13 +203,14 @@ mkSLink(){ # {{{
 	echo "シンボリックリンクを作成しました"
 } # }}}
 # }}}1
-
 gitSetting(){ # {{{
 	count=0
 	while true; do
-		echo -n "gitの初期設定をしますか？ (y/N) : "
-		read check
-		if [ "${check}" == "y" ]; then
+		if [ "$gitS" == "" ]; then
+			echo -n "gitの初期設定をしますか？ (y/N) : "
+			read gitS
+		fi
+		if [ "${gitS}" == "y" ]; then
 			echo "gitの設定をします"
 			~/work/dotfiles/gitSetting.sh
 			if [ "${?}" == "0" ]; then
@@ -229,31 +227,12 @@ gitSetting(){ # {{{
 		fi
 	done
 } # }}}
-
 # よく使うアプリケーションのインストール {{{1
 appInstall_mac() { #{{{
-	echo -n "macですね? (y/n) : "
-	read check
-	if [ "${check}" == "n" ]; then
-		echo "まじっすか... osが判断できませんでした"
-		echo "手作業で実行してください"
-		echo "異常終了します"
-		exit 1
-	else
-		echo "未実装"
-		return
-	fi
+	echo "未実装"
+	return
 } # }}}
 appInstall_linux() { #{{{
-	echo "debian系のみ実行してね♥ (rhel? 知らない子ですね)"
-	echo -n "Linuxですね? (Y/n) : "
-	read check
-	if [ "${check}" == "n" ]; then
-		echo "まじっすか... OSが判断できませんでした"
-		echo "手作業で実行してください"
-		echo "異常終了します"
-		exit 1
-	fi
 
 	# 英語化
 	echo -e "\n=======================\n"
@@ -296,17 +275,8 @@ appInstall_linux() { #{{{
 	sudo aptitude install -y neovim
 } # }}}
 appInstall_cygwin() { #{{{
-	echo -n "windowsですね? (Y/n) : "
-	read check
-	if [ "${check}" == "n" ]; then
-		echo "まじっすか... OSが判断できませんでした"
-		echo "手作業で実行してください"
-		echo "異常終了します"
-		exit 1
-	else
-		echo "未実装"
-		return
-	fi
+	echo "未実装"
+	return
 } # }}}
 pyenvInstall(){ # {{{
 	# pyenv
@@ -322,26 +292,29 @@ rbenvInstall(){ # {{{
 	git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
 } # }}}
 appInstall() { #{{{
-	echo -n "よく使うアプリケーションをインストールしますか？ (y/N) : "
-	read check
-	if [ "${check}" == "y" ]; then
+	if [ "$app" == "" ]; then
+		echo -n "よく使うアプリケーションをインストールしますか？ (y/N) : "
+		read app
+	fi
+	if [ "${app}" == "y" ]; then
 		count=0
-		while true; do
-			echo -n "このファイルinit.shは~/work/dotfilesに置かれていますか？ (y/n) : "
-			read check
-			if [ "${check}" == "n" ]; then
-				echo "init.shは~/work/dotfiles/init.shに置かれなければなりません"
-				echo "正しい位置に置いてください"
-				echo "mkdir ~/work"
-				echo "cd ~/work"
-				echo "git clone http://git:kumamon@git.xcd0.com/git/dot.git"
-				echo "でできます"
-				echo "異常終了します"
-				exit 1
-			else
-				break
-			fi
-		done
+		if [ "$pos" == "" ]; then
+			echo -n "このファイルinit.shは~/work/dotfilesに置かれていますか？ (y/N) : "
+			read pos
+		fi
+		if [ "${pos}" == "y" ]; then
+			echo -n ""
+			break
+		else
+			echo "init.shは~/work/dotfiles/init.shに置かれなければなりません"
+			echo "正しい位置に置いてください"
+			echo "mkdir ~/work"
+			echo "cd ~/work"
+			echo "git clone http://git:kumamon@git.xcd0.com/git/dot.git"
+			echo "でできます"
+			echo "エラー終了します"
+			exit 1
+		fi
 
 		count=0
 
@@ -360,12 +333,11 @@ appInstall() { #{{{
 	fi
 } # }}}
 # }}}1
-
 # golang {{{1
 goPull(){ # {{{
 	if [ -d ~/work/go/go/.git ]; then
 		echo "~/work/go/go/.gitが存在します"
-		ehco "go を pull します"
+		echo "go を pull します"
 		cd ~/work/go/go
 		echo "git pull origin master"
 		git pull origin master
@@ -411,6 +383,10 @@ goLastBuild(){ # {{{
 	echo -e "\n=======================\n"
 	echo "最新版のgolangをビルドします"
 
+	godir=$HOME/work/go
+
+	mv $godir/go/bin $godir/go/bin_$date
+
 	rm -rf ~/go1.4
 	ln -sf $godir/go1.4 ~/
 
@@ -436,6 +412,9 @@ goLastBuild(){ # {{{
 	go version
 } # }}}
 goInstall(){ # {{{
+	if [ "$ins" != "y" ]; then
+		return
+	fi
 	echo -e "\n=======================\n"
 	echo "goをインストールします"
 
@@ -447,9 +426,11 @@ goInstall(){ # {{{
 			echo "~/work/go/bin/goが存在します"
 			~/work/go/bin/go version
 			flag=0
-			echo -n "元のファイルを移動しますか? (Y/n) : "
-			read check
-			if [ "${check}" == "n" ]; then
+			if [ "$goM" == "" ]; then
+				echo -n "元のファイルを移動しますか? (Y/n) : "
+				read goM
+			fi
+			if [ "${goM}" == "n" ]; then
 				echo -n ""
 				echo -n "最新版に更新しますか? (y/N) : "
 			else
@@ -464,11 +445,13 @@ goInstall(){ # {{{
 				echo "~/work/go/go/bin/goが存在します"
 				echo -n "go version : "
 				~/work/go/go/bin/go version
-				if [ "`which go`" != "~/work/go/go/bin/go" ]; then
-					echo "~/work/go/go/binにパスが通っていません"
-					echo -n "~/work/go/go/binにパスを通しますか? (y/N) : "
-					read check
-					if [ "${check}" == "y" ]; then
+				if [ "`which go`" != "$HOME/work/go/go/bin/go" ]; then
+					if [ "$gopp" == "" ]; then
+						echo "~/work/go/go/binにパスが通っていません"
+						echo -n "~/work/go/go/binにパスを通しますか? (y/N) : "
+						read gopp
+					fi
+					if [ "${gopp}" == "y" ]; then
 						if [ "$OS" == 'Darwin' ]; then
 							echo 'export PATH="~/work/go/go/bin:$PATH"' >> ~/.bash_profile
 							echo 'export PATH="~/work/go/go/bin:$PATH"' >> tmp
@@ -498,14 +481,20 @@ goInstall(){ # {{{
 				echo -n "go version : "
 				which go
 			fi
-			echo -n "最新版に更新しますか? (y/N) : "
+			if [ "$ins" == "" ]; then
+				echo -n "最新版に更新しますか? (y/N) : "
+			fi
 		fi
 	else
-		echo "goが存在しません"
-		echo -n "goをインストールしますか? (y/N) : "
+		if [ "$ins" == "" ]; then
+			echo "goが存在しません"
+			echo -n "goをインストールしますか? (y/N) : "
+		fi
 	fi
-	read check
-	if [ "${check}" == "y" ]; then
+	if [ "$ins" == "" ]; then
+		read ins
+	fi
+	if [ "${ins}" == "y" ]; then
 		flag=1
 		goPull
 		cd ~/work/go
@@ -522,9 +511,11 @@ goInstall(){ # {{{
 		if [ -f ~/work/go/go1.4/bin/go ]; then
 			echo "~/work/go/go1.4/bin/goが存在します"
 			~/work/go/go1.4/bin/go version
-			echo "go 1.4をビルドし直しますか？ : (Y/n)"
-			read check
-			if [ "${check}" == "n" ]; then
+			if [ "$gorb4" == "" ]; then
+				echo "go 1.4をビルドし直しますか？ : (Y/n)"
+				read gorb4
+			fi
+			if [ "${gorb4}" == "n" ]; then
 				echo -n ""
 			else
 				go14Build
@@ -540,10 +531,12 @@ goInstall(){ # {{{
 
 		if [ -f ~/work/go/go/bin/go ]; then
 			flag=1
-			echo "~/work/go/go/bin/goが存在します"
-			echo -n "ビルドし直しますか? (y/N) : "
-			read check
-			if [ "${check}" == "y" ]; then
+			if [ "$gorb" == "" ]; then
+				echo "~/work/go/go/bin/goが存在します"
+				echo -n "ビルドし直しますか? (y/N) : "
+				read gorb
+			fi
+			if [ "${gorb}" == "y" ]; then
 				flag=0
 			fi
 		else
@@ -558,28 +551,20 @@ goInstall(){ # {{{
 	fi
 } # }}}
 # }}}1
-
 # }}}2
 
-interactiveMode(){ # {{{
-	# インタラクティブモード
+run(){ # {{{
 	date=`date +%s`
 	# 何回実行しても問題ない奴ら
 	message
 	osCheck
 	mkSLink
 	mkUsr
-
-	echo -n "goの設定までスキップしますか？ (Y/n) : "
-	read check
-	if [ "${check}" == "n" ]; then
+	if [ "${goskip}" == "n" ]; then
 		gitSetting
 		appInstall
 	fi
-
 	goInstall
-
-
 	echo -e "\n=======================\n"
 	echo "以上ですべての処理が完了しました"
 	echo -e "\n=======================\n"
@@ -589,20 +574,145 @@ interactiveMode(){ # {{{
 	exit 0
 } # }}}
 
-autoMode(){
-	exit 0
-}
-
+# init  {{{1
+interactiveMode(){ # {{{
+	echo "======================================================================"
+	echo "インタラクティブモード"
+	echo "対話的に実行します"
+	sleep 1
+	echo -n "goの設定までスキップしますか？ (Y/n) : "
+	read goskip
+	run
+} # }}}
+autoMode(){ # {{{
+	echo "======================================================================"
+	echo "オートモード"
+	echo ""
+	echo "非常に危険なモードです。"
+	echo "オートモードの設定をします。"
+	echo "質問にyかnで答えてください。(最大8つ)"
+	echo "大文字になっている方がどちらかというと安全です"
+	echo "間違えると大変危険です。注意してください。"
+	echo ""
+	echo -n "1 : このシェルスクリプトは~/work/dotfilesに置かれていますか? (y/N) : "
+	read pos
+	if [ "$pos" == "y" ]; then
+		echo ""
+	elif [ "$pos" == "n" ]; then
+		echo "init.shは~/work/dotfiles/init.shに置かれなければなりません"
+		echo "正しい位置に置いてください"
+		echo "mkdir ~/work"
+		echo "cd ~/work"
+		echo "git clone http://git:kumamon@git.xcd0.com/git/dot.git"
+		echo "でできます"
+		echo "エラー終了します"
+		exit 1
+	else
+		echo "入力がyかnではありませんでした。"
+		echo "エラー終了します。"
+		exit 1
+	fi
+	echo -n "2 : gitの初期設定をしますか? (y/N) : "
+	read gitS
+	if [   "$gitS" == "y" ]; then
+		echo ""
+	elif [ "$gitS" == "n" ]; then
+		echo ""
+	else
+		echo "入力がyかnでありませんでした。"
+		echo "エラー終了します。"
+		exit 1
+	fi
+	echo -n "3 : よく使うアプリケーションをインストールしますか? (y/N) : "
+	read app
+	if [   "$app" == "y" ]; then
+		echo ""
+	elif [ "$app" == "n" ]; then
+		echo ""
+	else
+		echo "入力がyかnではありませんでした。"
+		echo "エラー終了します。"
+		exit 1
+	fi
+	echo -n "4 : 最新版のgoをインストールしますか? (y/N) : "
+	read ins
+	if [ "$ins" == "y" ]; then
+		gorb=$ins
+		source ~/.bashrc
+		if [ "`which go`" != "$HOME/work/go/go/bin/go" ]; then
+			echo "5 : ~/work/go/go/binにパスが通っていません"
+			echo -n "    ~/work/go/go/binにパスを通しますか? (y/N) : "
+			read gopp
+			if [   "$gopp" == "y" ]; then
+				echo ""
+			elif [ "$gopp" == "n" ]; then
+				echo ""
+			else
+				echo "入力がyかnではありませんでした。"
+				echo "エラー終了します。"
+				exit 1
+			fi
+		fi
+		if [ -f ~/work/go/bin/go ]; then
+			echo "5 : ~/work/go/bin/goが存在します"
+			~/work/go/bin/go version
+			echo -n "    ファイルを移動しますか? (Y/n) : "
+			read goM
+			if [   "$goM" == "y" ]; then
+				echo ""
+			elif [ "$goM" == "n" ]; then
+				echo ""
+			else
+				echo "入力がyかnではありませんでした。"
+				echo "エラー終了します。"
+				exit 1
+			fi
+		fi
+		if [ -f ~/work/go/go1.4/bin/go ]; then
+			echo "    ~/work/go/go1.4/bin/goが存在します"
+			echo -n "7 : go 1.4をビルドし直しますか. : (Y/n)"
+			read gorb4
+			if [   "$gorb4" == "y" ]; then
+				echo ""
+			elif [ "$gorb4" == "n" ]; then
+				echo ""
+			else
+				echo "入力がyかnではありませんでした。"
+				echo "エラー終了します。"
+				exit 1
+			fi
+		fi
+	elif [   "$ins" == "n" ]; then
+		gopp=n
+		goM=n
+		gorb4=n
+		gorb=n
+	else
+		echo "入力がyかnではありませんでした。"
+		echo "エラー終了します。"
+		exit 1
+	fi
+	echo "8 : オートモードの設定は以上です。"
+	echo -n "    入力に間違いはありませんね? (y/N) : "
+	read fin
+	if [ "$fin" == "y" ]; then
+		run
+		exit 0
+	else
+		echo "エラー終了します。"
+		exit 1
+	fi
+} # }}}
 askMode(){ # {{{
 
 	count=0
 	while true; do
-		echo -n "どちらのモードで実行しますか? (1/2) : "
+		echo -n "どちらのモードで実行しますか? ( i / a ) : "
 		read check
-		if [ "${check}" == "1" ]; then
-			interavtivemode
-		elif [ "${check}" == "2" ]; then
-			automode
+		if [ "${check}" == "i" ]; then
+			interactiveMode
+		elif [ "${check}" == "a" ]; then
+			autoMode
 		else
 			((count++))
 			if [ "${count}" == "3" ]; then
@@ -611,21 +721,22 @@ askMode(){ # {{{
 				exit 1
 			fi
 			echo "誤入力です。"
-			echo "1か2を入力します。"
+			echo "iかaを入力します。"
 			echo "3回の誤入力で終了します。"
 		fi
 	done
 } # }}}
-
 message(){ # {{{
-	cat <<MSG
 
-	-----------------------------------------------------------
+echo -e "\n-------------------------------------------------------------------"
+	cat <<MSG
 
 	クリーンインストールしたら
 	最初に実行して環境設定を終わらせよう!
 	という目的で作ったshellscriptです。
 	もちろんクリーンじゃなくてもおkです。
+
+	Debian系のみ実行してね♥ RHEL? 知らない子ですね
 
 	使い方
 	① 対話的に実行   ( interactive mode )
@@ -639,12 +750,12 @@ MSG
 	cat <<MSG
 
 	オプションなしでは最初にどちらのモードで実行するか尋ねます。
-
-	-----------------------------------------------------------
-
 MSG
-} # }}}
+echo -e "\n-------------------------------------------------------------------\n"
 
+sleep 1
+
+} # }}}
 checkOption(){ # {{{
 	opt=$1
 	if [ "$opt" == "-h" ]; then
@@ -665,10 +776,10 @@ checkOption(){ # {{{
 		exit 1
 	fi
 } # }}}
+# }}}1
 
 checkOption $@
 
-sleep 1
 
 exit 0
 
