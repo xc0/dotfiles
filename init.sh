@@ -1,5 +1,7 @@
 #! /bin/bash
 
+version=0.2
+
 # 関数 {{{2
 
 osCheck(){ # {{{
@@ -239,7 +241,7 @@ appInstall_mac() { #{{{
 		exit 1
 	else
 		echo "未実装"
-		break
+		return
 	fi
 } # }}}
 appInstall_linux() { #{{{
@@ -303,7 +305,7 @@ appInstall_cygwin() { #{{{
 		exit 1
 	else
 		echo "未実装"
-		break
+		return
 	fi
 } # }}}
 pyenvInstall(){ # {{{
@@ -362,7 +364,6 @@ appInstall() { #{{{
 # golang {{{1
 goPull(){ # {{{
 	if [ -d ~/work/go/go/.git ]; then
-		flag2=1
 		echo "~/work/go/go/.gitが存在します"
 		ehco "go を pull します"
 		cd ~/work/go/go
@@ -410,8 +411,8 @@ goLastBuild(){ # {{{
 	echo -e "\n=======================\n"
 	echo "最新版のgolangをビルドします"
 
-	rm -rf $HOME/go1.4
-	ln -sf $godir/go1.4 $HOME
+	rm -rf ~/go1.4
+	ln -sf $godir/go1.4 ~/
 
 	cd $godir/go/src
 
@@ -423,7 +424,7 @@ goLastBuild(){ # {{{
 		./all.bat
 	fi
 
-	rm -rf $HOME/go1.4
+	rm -rf ~/go1.4
 
 	echo -e "\n=======================\n"
 	echo "最新版のgolangのビルドが完了しました"
@@ -470,13 +471,22 @@ goInstall(){ # {{{
 					if [ "${check}" == "y" ]; then
 						if [ "$OS" == 'Darwin' ]; then
 							echo 'export PATH="~/work/go/go/bin:$PATH"' >> ~/.bash_profile
-							source ~/.bash_profile
+							echo 'export PATH="~/work/go/go/bin:$PATH"' >> tmp
+							source tmp
+							rm tmp
 						elif [ "$OS" == 'Linux' ]; then
 							echo 'export PATH="~/work/go/go/bin:$PATH"' >> ~/.bashrc
-							source ~/.bashrc
+							echo 'export PATH="~/work/go/go/bin:$PATH"' >> tmp
+							source tmp
+							rm tmp
 						elif [ "$OS" == 'MINGW32_NT' ]; then
 							echo 'export PATH="~/work/go/go/bin:$PATH"' >> ~/.bashrc
-							source ~/.bashrc
+							echo 'export PATH="~/work/go/go/bin:$PATH"' >> tmp
+							source tmp
+							rm tmp
+						else
+							echo "OS Error in goInstall"
+							exit 1
 						fi
 						echo "~/work/go/go/binにパスを通しました"
 						which go
@@ -502,8 +512,10 @@ goInstall(){ # {{{
 
 		cp -rf ~/work/go/go ~/work/go/go1.4
 
-		godir=$HOME/work/go
-		GOROOT=$HOME/work/go
+		echo 'godir="$HOME/work/go"' >> tmp
+		echo 'GOROOT="$HOME/work/go"' >> tmp
+		source tmp
+		rm tmp
 		cd $godir/go1.4
 
 		# go1.4
@@ -549,7 +561,7 @@ goInstall(){ # {{{
 
 # }}}2
 
-interactive(){ # {{{
+interactiveMode(){ # {{{
 	# インタラクティブモード
 	date=`date +%s`
 	# 何回実行しても問題ない奴ら
@@ -572,23 +584,25 @@ interactive(){ # {{{
 	echo "以上ですべての処理が完了しました"
 	echo -e "\n=======================\n"
 	end=`date +%s`
-	past=$((end - start))
-	echo "実行時間 : $past"
+	past=$((end - date))
+	echo "実行時間 : $past 秒"
 	exit 0
 } # }}}
 
 autoMode(){
 	exit 0
 }
-modeAsk(){ #{{{
+
+askMode(){ # {{{
+
 	count=0
 	while true; do
 		echo -n "どちらのモードで実行しますか? (1/2) : "
 		read check
 		if [ "${check}" == "1" ]; then
-			interavtiveMode
+			interavtivemode
 		elif [ "${check}" == "2" ]; then
-			autoMode
+			automode
 		else
 			((count++))
 			if [ "${count}" == "3" ]; then
@@ -601,9 +615,9 @@ modeAsk(){ #{{{
 			echo "3回の誤入力で終了します。"
 		fi
 	done
-}# }}}
+} # }}}
 
-function message(){ # {{{
+message(){ # {{{
 	cat <<MSG
 
 	-----------------------------------------------------------
@@ -615,18 +629,44 @@ function message(){ # {{{
 
 	使い方
 	① 対話的に実行   ( interactive mode )
-#		: オプション \033[31m-i\033[m をつけて実行
+MSG
+	echo -e "		: オプション \033[0;35m-i\033[0;39m をつけて実行"
+	cat <<MSG
 
 	② 最初に入力だけしてあとは放置  ( auto mode )
-#		: オプション \033[31m-a\033[m をつけて実行
+MSG
+	echo -e "		: オプション \033[0;35m-a\033[0;39m をつけて実行"
+	cat <<MSG
 
 	オプションなしでは最初にどちらのモードで実行するか尋ねます。
 
 	-----------------------------------------------------------
+
 MSG
 } # }}}
 
-message
+checkOption(){ # {{{
+	opt=$1
+	if [ "$opt" == "-h" ]; then
+		message
+		exit 1
+	elif [ "$opt" == "-v" ]; then
+		echo $version
+		exit 1
+	elif [ "$opt" == "-a" ]; then
+		autoMode
+	elif [ "$opt" == "-i" ]; then
+		interactiveMode
+	elif [ "$#" == "0" ]; then
+		message
+		askMode
+	else
+		message
+		exit 1
+	fi
+} # }}}
+
+checkOption $@
 
 sleep 1
 
