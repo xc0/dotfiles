@@ -1,0 +1,48 @@
+
+" dein.vim {{{
+
+" dein のインストール方法
+" 他のプラグインとは違うインストールディレクトリを決めて以下のコマンドを実行
+" $ curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+" $ sh ./installer.sh {specify the installation directory}
+
+"dein Scripts-----------------------------
+
+" Required:
+set runtimepath+=$HOME/.config/nvim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+
+if dein#load_state($HOME . '/.config/nvim/dein')		" Required:
+	call dein#begin($HOME . '/.config/nvim/dein')
+
+	" Let dein manage dein (Required)
+	call dein#add($HOME .'.config/nvim/dein/repos/github.com/Shougo/dein.vim')
+
+	" You can specify revision/branch/tag.
+	call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
+
+	" toml
+	let g:rc_dir		= expand("~/.config/nvim")
+	let s:toml		= g:rc_dir . '/dein.toml'
+	let s:lazy_toml	= g:rc_dir . '/dein_lazy.toml'
+
+	" read toml and cache
+	call dein#load_toml(s:toml,			{'lazy':0})
+	call dein#load_toml(s:lazy_toml,	{'lazy':0})
+
+
+	" Required:
+	call dein#end()
+	call dein#save_state()
+endif
+
+filetype plugin indent on		" Required:
+syntax enable
+
+
+"End dein Scripts-------------------------
+
+if dein#check_install()
+	call dein#install()
+endif
+
+" }}}

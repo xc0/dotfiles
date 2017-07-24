@@ -1,0 +1,53 @@
+
+" dein.vim {{{
+
+" NeoBundle時代の古い記述
+" いるのかわからない
+augroup vimrc-checktime
+  autocmd!
+  autocmd winenter * checktime
+augroup end
+
+" dein のインストール方法
+" インストールディレクトリを決めて以下のコマンドを実行
+" $ curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+" $ sh ./installer.sh {specify the installation directory}
+
+"dein Scripts-----------------------------
+
+"set runtimepath+=$HOME/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+set runtimepath+=/home/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+
+if dein#load_state($HOME . '/.config/vim/dein')
+	call dein#begin($HOME . '/.config/vim/dein')
+
+	" Let dein manage dein  Required:
+	call dein#add($HOME . '/.config/vim/dein/repos/github.com/Shougo/dein.vim')
+
+	call dein#add('Shougo/neosnippet.vim')
+	call dein#add('Shougo/neosnippet-snippets')
+
+	" toml
+	let g:rc_dir		= expand("~/.config/vim")
+	let s:toml		= g:rc_dir . '/dein.toml'
+	let s:lazy_toml	= g:rc_dir . '/dein_lazy.toml'
+
+	" read toml and cache
+	call dein#load_toml(s:toml,			{'lazy':0})
+	call dein#load_toml(s:lazy_toml,	{'lazy':0})
+
+	call dein#end()
+	call dein#save_state()
+endif
+
+" Required:
+filetype plugin indent on
+syntax enable
+
+if dein#check_install()
+	call dein#install()
+endif
+
+"End dein Scripts-------------------------
+
+" }}}

@@ -104,7 +104,11 @@ mkSLink_mac(){ #{{{
 	ln -sf $dir/fonts
 } # }}}
 mkSLink_linux(){ # {{{
-	dir=~/work/dotfiles/linux
+	if [ "$HOME" == "/st/c2015/c5901" ]; then
+		dir=~/work/dotfiles/kcs
+	else
+		dir=~/work/dotfiles/linux
+	fi
 	echo "リンク先ファイル一覧"
 	ls -al $dir
 	echo ""
