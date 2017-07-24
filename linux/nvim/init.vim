@@ -115,7 +115,11 @@ if OSTYPE == "Darwin\n"
 		call dein#save_state()
 	endif
 elseif OSTYPE == "Linux\n"
-	set runtimepath+=/home/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+	if $HOME == '/st/c2015/c5901'
+		set runtimepath+=/st/c2015/c5901/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+	else
+		set runtimepath+=/home/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+	endif
 	if dein#load_state($HOME . '/.config/vim/dein')
 		call dein#begin($HOME . '/.config/vim/dein')
 
