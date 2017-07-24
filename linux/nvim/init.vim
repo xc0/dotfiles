@@ -91,6 +91,7 @@ endif
 "
 let OSTYPE = system('uname')
 if OSTYPE == "Darwin\n"
+	" {{{1
 	set runtimepath+=/Users/xc0/.config/nvim/dein/repos/github.com/Shougo/dein.vim
 	if dein#load_state('/Users/xc0/.config/nvim/dein')
 		call dein#begin('/Users/xc0/.config/nvim/dein')
@@ -114,23 +115,26 @@ if OSTYPE == "Darwin\n"
 		call dein#end()
 		call dein#save_state()
 	endif
+	" }}}
 elseif OSTYPE == "Linux\n"
 	if $HOME == '/st/c2015/c5901'
-		set runtimepath+=/st/c2015/c5901/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+		set runtimepath+=/st/c2015/c5901/.config/nvim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+	elseif $HOME == '/home/xcd0'
+		set runtimepath+=/home/xcd0/.config/nvim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
 	else
-		set runtimepath+=/home/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
+		set runtimepath+=/home/xc0/.config/nvim/dein/repos/github.com/Shougo/dein.vim	" dein.vimのインストールディレクトリ
 	endif
-	if dein#load_state($HOME . '/.config/vim/dein')
-		call dein#begin($HOME . '/.config/vim/dein')
+	if dein#load_state($HOME . '/.config/nvim/dein')
+		call dein#begin($HOME . '/.config/nvim/dein')
 
 		" Let dein manage dein  Required:
-		call dein#add($HOME . '/.config/vim/dein/repos/github.com/Shougo/dein.vim')
+		call dein#add($HOME . '/.config/nvim/dein/repos/github.com/Shougo/dein.vim')
 
 		call dein#add('Shougo/neosnippet.vim')
 		call dein#add('Shougo/neosnippet-snippets')
 
 		" toml
-		let g:rc_dir		= expand("~/.config/vim")
+		let g:rc_dir		= expand("~/.config/nvim")
 		let s:toml		= g:rc_dir . '/dein.toml'
 		let s:lazy_toml	= g:rc_dir . '/dein_lazy.toml'
 
