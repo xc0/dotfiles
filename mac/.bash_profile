@@ -169,3 +169,6 @@ eval "$(rbenv init -)"
 
 export PATH=$HOME/bin:$HOME/work/bin:$PATH
 
+alias gpl='git pull origin master'
+alias gps='git push origin master'
+

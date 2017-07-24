@@ -143,6 +143,8 @@ export PATH=~/usr/bin:/home/xcd0/work/bin:/home/xcd0/bin:$PATH
 export PATH=$HOME/work/go/go/bin:$HOME/work/go/go1.4/bin:$PATH
 
 alias xc0='ssh -2 -C -Y -p52622 xc0@xcd0.com'
+alias gpl='git pull origin master'
+alias gps='git push origin master'
 
 alias gosh=~ashihara/gosh
 alias prolog=~ashihara/prolog
