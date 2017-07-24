@@ -1,6 +1,5 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc) # for examples
 
 # If not running interactively, don't do anything
 case $- in
@@ -145,4 +144,6 @@ export PATH=$HOME/work/go/go/bin:$HOME/work/go/go1.4/bin:$PATH
 
 alias xc0='ssh -2 -C -Y -p52622 xc0@xcd0.com'
 
+alias gosh=~ashihara/gosh
+alias prolog=~ashihara/prolog
 
