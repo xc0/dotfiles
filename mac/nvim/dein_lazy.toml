@@ -1,0 +1,65 @@
+
+# Shougo's plugin {{{
+
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+[[plugins]]
+repo = 'Shougo/vimshell'
+#{ 'rev': '3787e5' }
+[[plugins]]
+repo = 'Shougo/unite.vim'
+[[plugins]]
+repo = 'Shougo/vimfiler'
+
+#}}}
+
+
+# その他いろいろ {{{
+[[plugins]]
+repo = 'tyru/caw.vim'				# コメントアウト強化 gciで行頭から,gcaで行末に
+hook_post_source= '''
+	nmap <Leader>c <Plug>(caw:i:toggle)		" \cでコメントOn/Off
+	vmap <Leader>c <Plug>(caw:i:toggle)		" \cでコメントOn/Off
+'''
+
+[[plugins]]
+repo = 'LeafCage/yankround.vim'		# クリップボード拡張
+hook_post_source= '''
+	nmap p <Plug>(yankround-p)
+	nmap P <Plug>(yankround-P)
+	nmap <C-p> <Plug>(yankround-prev)
+	nmap <C-n> <Plug>(yankround-next)
+	let g:yankround_max_history = 100
+	nnoremap <Leader><C-p> :<C-u>Denite yankround<CR>
+'''
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'		# 補完
+[[plugins]]
+repo = 'zchee/deoplete-go'			# golang
+[[plugins]]
+repo = 'landaire/deoplete-swift'	# swift
+[[plugins]]
+repo = 'zchee/deoplete-clang'		# C/C++/Obj-C/Obj-C++
+[[plugins]]
+repo = 'carlitux/deoplete-ternjs'	# javascript
+[[plugins]]
+repo = 'Shougo/deoplete-rct'		# ruby
+[[plugins]]
+repo = 'poppyschmo/deoplete-latex'	# latex
+[[plugins]]
+repo = 'neomake/neomake'			# 外部コマンドを非同期実行
+[[plugins]]
+repo = 'rking/ag.vim'				# 行末ホワイトスペース削除
+[[plugins]]
+repo = 'mattn/emmet-vim'			# html,css,xml support
+[[plugins]]
+repo = 'fatih/vim-go'				# golang support
+#[[plugins]]
+#repo = 	'yuratomo/w3m.vim'			# w3m
+
+#}}}
+
+
