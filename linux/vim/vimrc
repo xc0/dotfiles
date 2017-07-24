@@ -10,10 +10,10 @@ endif
 
 " NeoBundle時代の古い記述
 " いるのかわからない
-augroup vimrc-checktime
-  autocmd!
-  autocmd winenter * checktime
-augroup end
+"augroup vimrc-checktime
+"  autocmd!
+"  autocmd winenter * checktime
+"augroup end
 
 set noreadonly
 set autoread
@@ -57,10 +57,10 @@ if has('win32unix') && &term =~# '^xterm' && &t_Co < 256
   set t_Co=256  " Extend cygwin terminal color
 endif
 
-augroup swapchoice-readonly
-  autocmd!
-  autocmd SwapExists * let v:swapchoice = 'o'
-augroup END
+"augroup swapchoice-readonly
+"  autocmd!
+"  autocmd SwapExists * let v:swapchoice = 'o'
+"augroup END
 
 if has('win32unix')
   let &t_ti .= "\e[1 q"
@@ -96,7 +96,6 @@ if OSTYPE == "Darwin\n"
 	set runtimepath+=/Users/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim
 	if dein#load_state('/Users/xc0/.config/vim/dein')
 		call dein#begin('/Users/xc0/.config/vim/dein')
-
 		" Let dein manage dein
 		" Required:
 		call dein#add('/Users/xc0/.config/vim/dein/repos/github.com/Shougo/dein.vim')
