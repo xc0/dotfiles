@@ -267,16 +267,22 @@ appInstall_linux() { #{{{
 	sudo mktexlsr
 
 	# neovimのインストール
-	sudo aptitude install -y software-properties-common
 	echo -e "\n=======================\n"
-	echo "リポジトリを追加しようとします"
-	echo "ダメでも気にしない"
-	sudo add-apt-repository ppa:neovim-ppa/unstable
-	echo "sudo aptitude update > /dev/null 2>&1"
-	echo "不要なときはC-cでスキップします"
-	sudo aptitude update > /dev/null 2>&1
-	echo "neovimをインストールします"
-	sudo aptitude install -y neovim
+	echo "neovimをビルドします"
+	cd ~/work/
+	if [ -d neovim ]; then
+		if [ -d .git ]; then
+			cd neovim
+			git pull origin master
+		else
+			rm -rf neovim
+			git clone https://github.com/neovim/neovim
+		fi
+	else
+		git clone https://github.com/neovim/neovim
+		cd neovim
+	fi
+	make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/work/usr/local/neovim"
 } # }}}
 appInstall_cygwin() { #{{{
 	echo "未実装"
