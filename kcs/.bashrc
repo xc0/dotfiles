@@ -139,7 +139,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$HOME/.rbenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(rbenv init -)"
-export PATH=~/work/usr/bin:~/work/usr/local/bin:/home/xcd0/work/bin:/home/xcd0/bin:$PATH
+export PATH=~/work/usr/bin:~/work/usr/local/bin:~/work/bin:$PATH
 export PATH=$HOME/work/go/go/bin:$HOME/work/go/go1.4/bin:$PATH
 
 alias xc0='ssh -2 -C -Y -p52622 xc0@xcd0.com'
@@ -148,4 +148,6 @@ alias gps='git push origin master'
 
 alias gosh=~ashihara/gosh
 alias prolog=~ashihara/prolog
+
+right
 

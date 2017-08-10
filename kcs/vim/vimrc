@@ -32,8 +32,8 @@ set matchtime=1
 "set clipboard=unnamed
 set clipboard+=unnamed
 set smartcase
-"set wrap
-set nowrap
+set wrap
+"set nowrap
 set number
 set ruler
 set list
@@ -200,6 +200,9 @@ nnoremap swK <C-w>K
 nnoremap swL <C-w>L
 nnoremap swH <C-w>H		" ウィンドウを左に移動を
 nnoremap swe <C-w>=		" ウィンドウの大きさを揃える
+
+nnoremap j gj
+nnoremap k gk
 
 
 nnoremap ; :
