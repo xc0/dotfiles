@@ -283,6 +283,7 @@ appInstall_linux() { #{{{
 		cd neovim
 	fi
 	make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/work/usr/local/neovim"
+	make install
 } # }}}
 appInstall_cygwin() { #{{{
 	echo "未実装"
