@@ -91,8 +91,9 @@ while true; do
 	fi
 done
 
-exit 0
 
+echo $name
+echo $mail
 git config --global user.name "$name"
 git config --global user.email "$mail"
 git config --global core.editor $editor

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-version=0.2
+version=0.3
 
 # 関数群 {{{2
 osCheck(){ # {{{
@@ -10,6 +10,8 @@ osCheck(){ # {{{
 		OS='Linux'
 	elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
 		OS='Cygwin'
+	elif [ "$(uname -s)" == "MSYS_NT-10.0-WOW" ]; then
+		OS='Msys'
 	else
 		echo "Your platform ($(uname -s)) is not supported."
 		exit 1
@@ -175,6 +177,82 @@ mkSLink_cygwin(){ # {{{
 	dir=~/work/dotfiles/cygwin
 	echo "未実装"
 } # }}}
+mkSLink_msys(){ # {{{
+	echo "Mysys"
+	dir=~/work/dotfiles/msys
+	echo "リンク先ファイル一覧"
+	ls -al $dir
+	echo ""
+
+	if [ -L ~/.bashrc ]; then
+		rm ~/.bashrc
+	fi
+	if [ -f ~/.bashrc ]; then
+		echo ".bashrcが存在します"
+		mv ~/.bashrc ~/.bashrc_$date
+		echo ".bashrc_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.vimrc ]; then
+		rm ~/.vimrc
+	fi
+	if [ -f ~/.vimrc ]; then
+		echo ".vimrcが存在します"
+		mv ~/.vimrc ~/.vimrc_$date
+		echo ".vimrc_$dateにリネームしました"
+	fi
+	if [ -d $HOME/.config ]; then
+		echo -n ".configが存在します"
+	else
+		mkdir ~/.config
+	fi
+
+	if [ -L ~/.config/vim ]; then
+		rm ~/.config/vim
+	fi
+	if [ -d ~/.config/vim ]; then
+		echo "~/.config/vimが存在します"
+		mv ~/.config/vim ~/.config/vim_$date
+		echo "~/.config/vim_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.config/nvim ]; then
+		rm ~/.config/nvim
+	fi
+	if [ -d ~/.config/nvim ]; then
+		echo ".config/nvimが存在します"
+		mv ~/.config/nvim ~/.config/nvim_$date
+		echo "~/.config/nvim_$dateにリネームしました"
+	fi
+
+	if [ -L ~/.local/share/fonts ]; then
+		rm ~/.local/share/fonts
+	fi
+	if [ -d ~/.local/share/fonts ]; then
+		echo ".config/nvim~/.local/share/fontsが存在します"
+		mv ~/.local/share/fonts ~/.local/share/fonts_$date
+		echo "~/.local/share/fonts_$dateにリネームしました"
+	fi
+
+	echo "dir is $dir"
+
+	cd ~
+	ln -sf $dir/.bashrc
+	ln -sf $dir/.vimrc
+
+	cd ~/.config/
+	ln -sf $dir/nvim
+	ln -sf $dir/vim
+
+	cd ~/.local/share
+	ln -sf $dir/fonts
+
+	echo "シンボリックリンクの作成が完了しました"
+	echo "ホームディレクトリ"
+	ls -al ~
+	echo "~/.config"
+	ls -al ~/.config
+} # }}}
 mkSLink(){ # {{{
 	echo -e "\n=======================\n"
 	echo "dotfileのシンボリックリンクを作成します "
@@ -185,8 +263,11 @@ mkSLink(){ # {{{
 	elif [ "$OS" == "Linux" ]; then
 		mkSLink_linux
 
-	elif [ "$OS" == "MINGW32_NT" ]; then
-		mkSlink_cygwin
+	elif [ "$OS" == "Cygwin" ]; then
+		mkSLink_cygwin
+
+	elif [ "$OS" == "Msys" ]; then
+		mkSLink_msys
 	else
 		echo "Your platform ($(uname -s)) is not supported."
 		exit 1
@@ -237,7 +318,6 @@ appInstall_mac() { #{{{
 	return
 } # }}}
 appInstall_linux() { #{{{
-
 	# 英語化
 	echo -e "\n=======================\n"
 	echo "ホームディレクトリを英語化します"
@@ -289,6 +369,50 @@ appInstall_cygwin() { #{{{
 	echo "未実装"
 	return
 } # }}}
+appInstall_msys() { #{{{
+	echo "Application install for Mysys"
+	echo -e "\n=======================\n"
+	echo "ソースリストをアップデートします"
+	echo "pacman -Syuu"
+	echo "不要なときはC-cでスキップします"
+	pacman -Syuu
+	echo -e "\n=======================\n"
+	echo "いろいろインストールします"
+	echo "pacman -S make cmake gcc vim curl wget"
+	pacman -S make cmake gcc vim curl wget
+	echo "pacman -S python-dev python-pip python3-dev python3-pip"
+	pacman -S python-dev python-pip python3-dev python3-pip
+	echo "pip3 install neovim"
+	pip3 install neovim
+
+	# latex
+	echo -e "\n=======================\n"
+	echo "Latex関係のインストールをします"
+	echo "pacman -S tex-live-lang-cjk"
+       	pacman -S tex-live-lang-cjk
+	cp ~/work/dotfiles/sty/* /usr/share/texlive/texmf-dist/tex/latex/
+	mktexlsr
+
+	# neovimのインストール
+	echo -e "\n=======================\n"
+	echo "neovimをビルドします"
+	cd ~/work/
+	if [ -d neovim ]; then
+		if [ -d .git ]; then
+			cd neovim
+			git pull origin master
+		else
+			rm -rf neovim
+			git clone https://github.com/neovim/neovim
+		fi
+	else
+		git clone https://github.com/neovim/neovim
+		cd neovim
+	fi
+	make CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=$HOME/work/usr/local/neovim"
+	make install
+	return
+} # }}}
 pyenvInstall(){ # {{{
 	# pyenv
 	echo -e "\n=======================\n"
@@ -333,8 +457,10 @@ appInstall() { #{{{
 			appInstall_mac
 		elif [ "$OS" == 'Linux' ]; then
 			appInstall_linux
-		elif [ "$OS" == 'MINGW32_NT' ]; then
+		elif [ "$OS" == 'Cygwin' ]; then
 			appInstall_cygwin
+		elif [ "$OS" == 'Msys' ]; then
+			appInstall_msys
 		else
 			echo "Your platform ($(uname -s)) is not supported."
 			exit 1
@@ -385,7 +511,9 @@ go14Build(){ # {{{
 		./make.bash
 	elif [ "$OS" == 'Linux' ]; then
 		./make.bash
-	elif [ "$OS" == 'MINGW32_NT' ]; then
+	elif [ "$OS" == 'Cygwin' ]; then
+		./make.bat
+	elif [ "$OS" == 'Msys' ]; then
 		./make.bat
 	fi
 	echo "go1.4のビルドが完了しました"
@@ -407,7 +535,9 @@ goLastBuild(){ # {{{
 		./all.bash
 	elif [ "$OS" == 'Linux' ]; then
 		./all.bash
-	elif [ "$OS" == 'MINGW32_NT' ]; then
+	elif [ "$OS" == 'Cygwin' ]; then
+		./all.bat
+	elif [ "$OS" == 'Msys' ]; then
 		./all.bat
 	fi
 
@@ -567,7 +697,6 @@ goInstall(){ # {{{
 run(){ # {{{
 	date=`date +%s`
 	# 何回実行しても問題ない奴ら
-	message
 	osCheck
 	mkSLink
 	mkUsr
